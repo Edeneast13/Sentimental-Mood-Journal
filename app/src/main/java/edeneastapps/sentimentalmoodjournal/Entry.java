@@ -12,6 +12,7 @@ public class Entry {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String timestamp;
+    private String datestamp;
     private String content;
     private String title;
     private int mood;
@@ -56,5 +57,13 @@ public class Entry {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setDatestamp(String datestamp) {
+        this.datestamp = datestamp;
+    }
+
+    public String getDatestamp() {
+        return datestamp;
     }
 }

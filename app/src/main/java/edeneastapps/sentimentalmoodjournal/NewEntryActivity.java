@@ -122,8 +122,11 @@ public class NewEntryActivity extends AppCompatActivity {
     }
 
     void saveEntry(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
         Entry entry = new Entry();
-        entry.setTimestamp(returnCreationStamp());
+        entry.setTimestamp(returnTimeCreated(calendar));
+        entry.setDatestamp(returnDateCreated(calendar));
         entry.setTitle("Test Title");
         entry.setContent(mEntryInput.getText().toString());
         entry.setMood(mSelectedMood);
@@ -131,12 +134,14 @@ public class NewEntryActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    String returnCreationStamp(){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        String time = String.valueOf(calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE));
+    String returnDateCreated(Calendar calendar){
         String date = String.valueOf(calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.YEAR));
+        return date;
+    }
+
+    String returnTimeCreated(Calendar calendar){
+        String time = String.valueOf(calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE));
         String amOrPm = calendar.get(Calendar.AM_PM) == 0 ? "am" : "pm";
-        return date + " - " + time + " " + amOrPm;
+        return time + " " + amOrPm;
     }
 }

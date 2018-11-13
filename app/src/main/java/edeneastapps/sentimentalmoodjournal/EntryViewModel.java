@@ -14,7 +14,7 @@ public class EntryViewModel extends AndroidViewModel {
     private EntryDao mEntryDao;
     private ExecutorService mExecutorService;
 
-    public EntryViewModel(@NonNull Application application) {
+    EntryViewModel(@NonNull Application application) {
         super(application);
         mEntryDao = EntryDatabase.getDatabase(application).entryDao();
         mExecutorService = Executors.newSingleThreadExecutor();
@@ -23,6 +23,8 @@ public class EntryViewModel extends AndroidViewModel {
     LiveData<List<Entry>> getAllEntries(){
         return mEntryDao.findAll();
     }
+
+    LiveData<List<Entry>> getByDateCreated(String dateStamp){return mEntryDao.findByDateCreated(dateStamp);}
 
     void addEntry(final Entry entry){
         mExecutorService.execute(() -> mEntryDao.insertEntry(entry));

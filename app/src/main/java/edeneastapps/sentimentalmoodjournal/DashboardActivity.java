@@ -13,6 +13,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,6 +33,7 @@ public class DashboardActivity extends AppCompatActivity {
     RecyclerView mCalendarRecycler;
 
     EntryViewModel mEntryViewModel;
+    EntryAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,7 @@ public class DashboardActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initViewModel();
         initAdapter();
-        initCalendar();
+        initHorizontalCalendar();
     }
 
     void initViewModel(){
@@ -48,21 +51,30 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     void initAdapter(){
-        EntryAdapter adapter = new EntryAdapter(getApplicationContext());
+        mAdapter = new EntryAdapter(getApplicationContext());
         mEntryRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        mEntryRecycler.setAdapter(adapter);
-        mEntryViewModel.getAllEntries().observe(this, entries -> adapter.setData(entries));
+        mEntryRecycler.setAdapter(mAdapter);
+        mEntryViewModel.getAllEntries().observe(this, entries -> mAdapter.setData(entries));
     }
 
-    void initCalendar(){
-        HorizontalCalendarAdapter adapter = new HorizontalCalendarAdapter(getApplicationContext());
+    void initHorizontalCalendar(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        int currentMonth = calendar.get(Calendar.MONTH);
+        HorizontalCalendarAdapter adapter =
+                new HorizontalCalendarAdapter(getApplicationContext(),
+                        HorizontalCalendarUtils.calculateMonthLength(currentMonth),
+                        currentMonth,
+                        calendar.get(Calendar.YEAR),
+                        dateStamp -> {
+                            updateEntries(dateStamp);
+                        });
         mCalendarRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mCalendarRecycler.setAdapter(adapter);
-        List<HorizontalCalendarItem> items = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            items.add(new HorizontalCalendarItem("10", "Nov", new Color()));
-            adapter.setData(items);
-        }
+    }
+
+    void updateEntries(String dateStamp){
+        mEntryViewModel.getByDateCreated(dateStamp).observe(this, entries -> mAdapter.setData(entries));
     }
 
     void addTestEntry(){

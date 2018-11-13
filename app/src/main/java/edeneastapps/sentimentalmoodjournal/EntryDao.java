@@ -20,6 +20,9 @@ public interface EntryDao {
     @Query("SELECT * FROM entries")
     LiveData<List<Entry>> findAll();
 
+    @Query("SELECT * FROM entries WHERE datestamp = :dateStamp")
+    LiveData<List<Entry>> findByDateCreated(String dateStamp);
+
     @Update
     void updateEntry(Entry entry);
 
