@@ -30,9 +30,10 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
 
     @Override
     public void onBindViewHolder(@NonNull EntryViewHolder entryViewHolder, int i) {
+        String[] split = mEntryList.get(i).getTimestamp().split(" - ");
         entryViewHolder.title.setText(mEntryList.get(i).getTitle());
         entryViewHolder.content.setText(mEntryList.get(i).getContent());
-        entryViewHolder.time.setText(mEntryList.get(i).getCreationDate());
+        entryViewHolder.time.setText(split[1]);
     }
 
     @Override

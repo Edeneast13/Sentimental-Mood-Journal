@@ -1,6 +1,5 @@
 package edeneastapps.sentimentalmoodjournal;
 
-import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +25,15 @@ public class NewEntryActivity extends AppCompatActivity {
     ImageView mDoneButton;
 
     private boolean mIsChanged = false;
+    int mSelectedMood = 2;
     EntryViewModel mEntryViewModel;
+
+    //should enum this
+    final int ANGER = 1;
+    final int SAD = 2;
+    final int CONFUSED = 3;
+    final int CONTENT = 4;
+    final int HAPPY = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,31 @@ public class NewEntryActivity extends AppCompatActivity {
         saveEntry();
     }
 
+    @OnClick(R.id.angry_button)
+    void setAngryButtonListener(){
+        mSelectedMood = ANGER;
+    }
+
+    @OnClick(R.id.sad_button)
+    void setSadButtonListener(){
+        mSelectedMood = SAD;
+    }
+
+    @OnClick(R.id.confused_button)
+    void setConfusedButtonListener(){
+        mSelectedMood = CONFUSED;
+    }
+
+    @OnClick(R.id.content_button)
+    void setContentButtonListener(){
+        mSelectedMood = CONTENT;
+    }
+
+    @OnClick(R.id.happy_button)
+    void setHappyButtonListener(){
+        mSelectedMood = HAPPY;
+    }
+
     void watchEntryInput(){
         mEntryInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -85,32 +117,26 @@ public class NewEntryActivity extends AppCompatActivity {
          new AlertDialog.Builder(NewEntryActivity.this)
                 .setTitle("Are You Sure?")
                 .setMessage("Changes were made to this journal entry. If go back now you will loss your progress!")
-                .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                .setNegativeButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        NewEntryActivity.super.onBackPressed();
-                    }
-                }).show();
+                .setPositiveButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss())
+                .setNegativeButton("Confirm", (dialogInterface, i) -> NewEntryActivity.super.onBackPressed()).show();
     }
 
     void saveEntry(){
         Entry entry = new Entry();
+        entry.setTimestamp(returnCreationStamp());
         entry.setTitle("Test Title");
-        entry.setCreationDate(returnCurrentTimeStamp());
         entry.setContent(mEntryInput.getText().toString());
+        entry.setMood(mSelectedMood);
         mEntryViewModel.addEntry(entry);
         super.onBackPressed();
     }
 
-    String returnCurrentTimeStamp(){
+    String returnCreationStamp(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        return String.valueOf(calendar.getTimeInMillis());
+        String time = String.valueOf(calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE));
+        String date = String.valueOf(calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.YEAR));
+        String amOrPm = calendar.get(Calendar.AM_PM) == 0 ? "am" : "pm";
+        return date + " - " + time + " " + amOrPm;
     }
 }

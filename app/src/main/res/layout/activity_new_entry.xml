@@ -67,7 +67,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Current Mood"
+            android:text="Mood"
             android:textColor="@color/alternateText"
             android:textSize="18sp"
             android:id="@+id/mood_title_text"
@@ -92,30 +92,35 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
+                android:id="@+id/angry_button"
                 android:src="@mipmap/ic_angry_emoji"/>
 
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
+                android:id="@+id/sad_button"
                 android:src="@mipmap/ic_angry_emoji"/>
 
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
+                android:id="@+id/confused_button"
                 android:src="@mipmap/ic_angry_emoji"/>
 
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
+                android:id="@+id/content_button"
                 android:src="@mipmap/ic_angry_emoji"/>
 
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
+                android:id="@+id/happy_button"
                 android:src="@mipmap/ic_angry_emoji"/>
         </LinearLayout>
 

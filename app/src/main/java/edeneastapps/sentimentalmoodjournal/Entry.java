@@ -11,26 +11,15 @@ public class Entry {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private String creationDate;
+    private String timestamp;
     private String content;
     private String title;
+    private int mood;
 
     Entry(){ }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(String creationDate) {
-        this.creationDate = creationDate;
     }
 
     public String getContent() {
@@ -47,5 +36,25 @@ public class Entry {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public int getMood() {
+        return mood;
+    }
+
+    public void setMood(int mood) {
+        this.mood = mood;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

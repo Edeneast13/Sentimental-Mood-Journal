@@ -69,7 +69,7 @@ public class DashboardActivity extends AppCompatActivity {
         Entry entry = new Entry();
         entry.setTitle("Entry Title");
         entry.setContent("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. ");
-        entry.setCreationDate("9:00 pm");
+        entry.setTimestamp("9:00 pm");
         mEntryViewModel.addEntry(entry);
     }
 
