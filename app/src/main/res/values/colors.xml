@@ -8,4 +8,5 @@
     <color name="backgroundDark">#424242</color>
 
     <color name="primaryText">#FFFFFF</color>
+    <color name="alternateText">#4A4A4A</color>
 </resources>

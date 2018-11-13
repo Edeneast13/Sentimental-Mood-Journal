@@ -6,6 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
     android:layout_marginBottom="8dp"
+    android:outlineProvider="bounds"
+    android:elevation="4dp"
     android:background="@drawable/rounded_card_background">
 
     <TextView

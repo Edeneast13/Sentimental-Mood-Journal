@@ -2,8 +2,11 @@ package edeneastapps.sentimentalmoodjournal;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -72,6 +75,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     @OnClick(R.id.entry_add_button)
     void setEntryAddButton(){
-        addTestEntry();
+        startActivity(new Intent(DashboardActivity.this, NewEntryActivity.class));
+        overridePendingTransition(0, 0);
     }
 }
