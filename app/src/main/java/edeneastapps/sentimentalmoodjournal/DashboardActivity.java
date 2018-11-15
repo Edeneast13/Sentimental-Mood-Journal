@@ -1,21 +1,16 @@
 package edeneastapps.sentimentalmoodjournal;
 
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.persistence.room.Room;
 import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,10 +61,17 @@ public class DashboardActivity extends AppCompatActivity {
                         HorizontalCalendarUtils.calculateMonthLength(currentMonth),
                         currentMonth,
                         calendar.get(Calendar.YEAR),
-                        dateStamp -> {
+                        (dateStamp, position) -> {
                             updateEntries(dateStamp);
                         });
-        mCalendarRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mCalendarRecycler.setLayoutManager(layoutManager);
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(mCalendarRecycler);
+        int totalVisibleItems = layoutManager.findFirstVisibleItemPosition() - layoutManager.findLastVisibleItemPosition();
+        int centeredItemPosition = totalVisibleItems / 2;
+        mCalendarRecycler.smoothScrollToPosition(calendar.get(Calendar.DAY_OF_MONTH));
+        mCalendarRecycler.setScrollY(centeredItemPosition);
         mCalendarRecycler.setAdapter(adapter);
     }
 

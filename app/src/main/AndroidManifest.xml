@@ -2,6 +2,8 @@
 <manifest package="edeneastapps.sentimentalmoodjournal"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -27,6 +29,11 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:parentActivityName=".DashboardActivity">
         </activity>
+
+        <service
+            android:name=".TwinWorldNetworkService"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

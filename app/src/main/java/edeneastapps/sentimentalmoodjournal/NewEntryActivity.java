@@ -1,5 +1,6 @@
 package edeneastapps.sentimentalmoodjournal;
 
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -131,17 +132,24 @@ public class NewEntryActivity extends AppCompatActivity {
         entry.setContent(mEntryInput.getText().toString());
         entry.setMood(mSelectedMood);
         mEntryViewModel.addEntry(entry);
+        startNetworkService(entry);
         super.onBackPressed();
     }
 
     String returnDateCreated(Calendar calendar){
-        String date = String.valueOf(calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.YEAR));
-        return date;
+        return String.valueOf(calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.YEAR));
     }
 
     String returnTimeCreated(Calendar calendar){
         String time = String.valueOf(calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE));
         String amOrPm = calendar.get(Calendar.AM_PM) == 0 ? "am" : "pm";
         return time + " " + amOrPm;
+    }
+
+    void startNetworkService(Entry entry){
+        Intent intent = new Intent(this, TwinWorldNetworkService.class);
+        intent.setClass(this, TwinWorldNetworkService.class);
+        intent.putExtra("entry", entry);
+        startService(intent);
     }
 }

@@ -43,7 +43,7 @@ public class HorizontalCalendarAdapter extends RecyclerView.Adapter<HorizontalCa
         holder.mDay.setText(String.valueOf(i + 1));
         holder.mMonth.setText(HorizontalCalendarUtils.returnMonthName(mCurrentMonth));
         holder.mItemLayout.setOnClickListener(view -> {
-           mOnDaySelectedCallBack.OnDaySelected(String.valueOf(mCurrentMonth + "/" + (i + 1) + "/" + mCurrentYear));
+           mOnDaySelectedCallBack.OnDaySelected(String.valueOf(mCurrentMonth + "/" + (i + 1) + "/" + mCurrentYear), i);
         });
     }
 
@@ -66,6 +66,6 @@ public class HorizontalCalendarAdapter extends RecyclerView.Adapter<HorizontalCa
     }
 
     public interface OnDaySelectedCallBack{
-        void OnDaySelected(String dateStamp);
+        void OnDaySelected(String dateStamp, int position);
     }
 }

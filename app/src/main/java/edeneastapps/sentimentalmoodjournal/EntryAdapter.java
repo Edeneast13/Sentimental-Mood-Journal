@@ -2,7 +2,9 @@ package edeneastapps.sentimentalmoodjournal;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,13 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
         entryViewHolder.title.setText(mEntryList.get(i).getTitle());
         entryViewHolder.content.setText(mEntryList.get(i).getContent());
         entryViewHolder.time.setText(mEntryList.get(i).getTimestamp());
+        String score = mEntryList.get(i).getSentimentScore();
+        if (score != null){
+            entryViewHolder
+                    .layout
+                    .setBackgroundColor(
+                            mContext.getResources().getColor(Utils.returnSentimentRangeColor(Float.parseFloat(score))));
+        }
     }
 
     @Override
@@ -47,6 +56,8 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
         TextView content;
         @BindView(R.id.entry_item_time)
         TextView time;
+        @BindView(R.id.entry_item_layout)
+        ConstraintLayout layout;
         EntryViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
