@@ -1,6 +1,7 @@
 package edeneastapps.sentimentalmoodjournal;
 
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.view.View;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -27,6 +29,9 @@ public class DashboardActivity extends AppCompatActivity {
     @BindView(R.id.calender_recycler)
     RecyclerView mCalendarRecycler;
 
+    @BindView(R.id.dashboard_toolbar)
+    ConstraintLayout mToolbar;
+
     EntryViewModel mEntryViewModel;
     EntryAdapter mAdapter;
 
@@ -39,6 +44,8 @@ public class DashboardActivity extends AppCompatActivity {
         initViewModel();
         initAdapter();
         initHorizontalCalendar();
+
+        mToolbar.setElevation(8);
     }
 
     @Override
@@ -62,15 +69,14 @@ public class DashboardActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         int currentMonth = calendar.get(Calendar.MONTH);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         HorizontalCalendarAdapter adapter =
                 new HorizontalCalendarAdapter(getApplicationContext(),
-                        HorizontalCalendarUtils.calculateMonthLength(currentMonth),
-                        currentMonth,
-                        calendar.get(Calendar.YEAR),
-                        (dateStamp, position) -> {
+                        new HorizontalCalendarProperties(HorizontalCalendarUtils.calculateMonthLength(currentMonth), currentMonth, calendar.get(Calendar.YEAR)),
+                        (view, dateStamp, position) -> {
                             updateEntries(dateStamp);
+                            scrollToCenter(view, layoutManager);
                         });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mCalendarRecycler.setLayoutManager(layoutManager);
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(mCalendarRecycler);
@@ -81,16 +87,14 @@ public class DashboardActivity extends AppCompatActivity {
         mCalendarRecycler.setAdapter(adapter);
     }
 
-    void updateEntries(String dateStamp){
-        mEntryViewModel.getByDateCreated(dateStamp).observe(this, entries -> mAdapter.setData(entries));
+    private void scrollToCenter(View view, LinearLayoutManager layoutManager) {
+        int itemToScroll = mCalendarRecycler.getChildPosition(view);
+        int centerOfScreen = mCalendarRecycler.getWidth() / 2 - view.getWidth() / 2;
+        layoutManager.scrollToPositionWithOffset(itemToScroll, centerOfScreen);
     }
 
-    void addTestEntry(){
-        Entry entry = new Entry();
-        entry.setTitle("Entry Title");
-        entry.setContent("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. ");
-        entry.setTimestamp("9:00 pm");
-        mEntryViewModel.addEntry(entry);
+    void updateEntries(String dateStamp){
+        mEntryViewModel.getByDateCreated(dateStamp).observe(this, entries -> mAdapter.setData(entries));
     }
 
     @OnClick(R.id.entry_add_button)

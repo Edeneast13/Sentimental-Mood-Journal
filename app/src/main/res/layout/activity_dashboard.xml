@@ -9,9 +9,10 @@
     android:background="@color/backgroundLight">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/dashboard_toolbar"
+        android:background="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -93,18 +94,6 @@
             android:id="@+id/calender_recycler">
         </android.support.v7.widget.RecyclerView>
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="50dp"
-            android:layout_height="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/rounded_calendar_marker_background"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/calender_recycler"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-        </android.support.constraint.ConstraintLayout>
-
     </android.support.constraint.ConstraintLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -124,7 +113,7 @@
         android:id="@+id/entry_add_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:src="@mipmap/ic_plus_icon_white"
+        android:src="@mipmap/ic_add_white"
         android:backgroundTint="#4A90E2"
         android:layout_margin="16dp"/>
 

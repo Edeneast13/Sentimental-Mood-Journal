@@ -9,27 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HorizontalCalendarAdapter extends RecyclerView.Adapter<HorizontalCalendarAdapter.HorizontalCalendarViewHolder>{
 
     private Context mContext;
-    private int mCurrentMonthLength;
-    private int mCurrentMonth;
-    private int mCurrentYear;
-    private OnDaySelectedCallBack mOnDaySelectedCallBack;
+    private HorizontalCalendarProperties mProperties;
+    private OnDaySelectedListener mOnDaySelectedListener;
 
-    HorizontalCalendarAdapter(Context context, int currentMonthLength, int currentMonth, int currentYear, OnDaySelectedCallBack callBack) {
+    HorizontalCalendarAdapter(Context context, HorizontalCalendarProperties properties, OnDaySelectedListener callBack) {
         this.mContext = context;
-        this.mCurrentMonthLength = currentMonthLength;
-        this.mCurrentMonth = currentMonth;
-        this.mCurrentYear = currentYear;
-        this.mOnDaySelectedCallBack = callBack;
+        this.mProperties = properties;
+        this.mOnDaySelectedListener = callBack;
     }
 
     @NonNull
@@ -39,17 +31,17 @@ public class HorizontalCalendarAdapter extends RecyclerView.Adapter<HorizontalCa
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HorizontalCalendarViewHolder holder, int i) {
-        holder.mDay.setText(String.valueOf(i + 1));
-        holder.mMonth.setText(HorizontalCalendarUtils.returnMonthName(mCurrentMonth));
+    public void onBindViewHolder(@NonNull HorizontalCalendarViewHolder holder, int position) {
+        holder.mDay.setText(String.valueOf(position + 1));
+        holder.mMonth.setText(HorizontalCalendarUtils.returnMonthName(mProperties.currentMonth));
         holder.mItemLayout.setOnClickListener(view -> {
-           mOnDaySelectedCallBack.OnDaySelected(String.valueOf(mCurrentMonth + "/" + (i + 1) + "/" + mCurrentYear), i);
+           mOnDaySelectedListener.OnDaySelected(view, String.valueOf(mProperties.currentMonth + "/" + (position + 1) + "/" + mProperties.currentYear), position);
         });
     }
 
     @Override
     public int getItemCount() {
-        return mCurrentMonthLength;
+        return mProperties.currentMonthLength;
     }
 
     class HorizontalCalendarViewHolder extends RecyclerView.ViewHolder{
@@ -59,13 +51,15 @@ public class HorizontalCalendarAdapter extends RecyclerView.Adapter<HorizontalCa
         TextView mMonth;
         @BindView(R.id.calendar_item)
         ConstraintLayout mItemLayout;
+        @BindView(R.id.select_marker)
+        ConstraintLayout mSelectMarker;
         HorizontalCalendarViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }
 
-    public interface OnDaySelectedCallBack{
-        void OnDaySelected(String dateStamp, int position);
+    public interface OnDaySelectedListener {
+        void OnDaySelected(View view, String dateStamp, int position);
     }
 }

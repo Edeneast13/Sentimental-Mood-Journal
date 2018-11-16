@@ -1,12 +1,14 @@
 package edeneastapps.sentimentalmoodjournal;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -34,13 +36,42 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
         entryViewHolder.title.setText(mEntryList.get(i).getTitle());
         entryViewHolder.content.setText(mEntryList.get(i).getContent());
         entryViewHolder.time.setText(mEntryList.get(i).getTimestamp());
-        String score = mEntryList.get(i).getSentimentScore();
-        if (score != null){
-            entryViewHolder
-                    .layout
-                    .setBackgroundColor(
-                            mContext.getResources().getColor(Utils.returnSentimentRangeColor(Float.parseFloat(score))));
+//        String score = mEntryList.get(i).getSentimentScore();
+//        if (score != null){
+//            entryViewHolder
+//                    .layout
+//                    .setBackgroundColor(
+//                            mContext.getResources().getColor(Utils.returnSentimentRangeColor(Float.parseFloat(score))));
+//        }
+
+        switch (mEntryList.get(i).getMood()){
+            case 0: {
+                entryViewHolder.emotion.setImageResource(R.mipmap.ic_angry_icon_white);
+                break;
+            }
+            case 1: {
+                entryViewHolder.emotion.setImageResource(R.mipmap.ic_sad_emoji_white);
+                break;
+            }
+            case 2: {
+                entryViewHolder.emotion.setImageResource(R.mipmap.ic_confused_emoji_white);
+                break;
+            }
+            case 3: {
+                entryViewHolder.emotion.setImageResource(R.mipmap.ic_okay_emoji_white);
+                break;
+            }
+            case 4: {
+                entryViewHolder.emotion.setImageResource(R.mipmap.ic_happy_emoji_white);
+                break;
+            }
         }
+
+        GradientDrawable shape = new GradientDrawable();
+        shape.setCornerRadius(25);
+        shape.setColor(mContext.getResources().getColor(Utils.returnSentimentRangeColor(Float.parseFloat(mEntryList.get(i).getSentimentScore()))));
+        entryViewHolder.layout.setBackground(shape);
+        entryViewHolder.layout.setElevation(4);
     }
 
     @Override
@@ -57,6 +88,8 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
         TextView time;
         @BindView(R.id.entry_item_layout)
         ConstraintLayout layout;
+        @BindView(R.id.entry_emotion)
+        ImageView emotion;
         EntryViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

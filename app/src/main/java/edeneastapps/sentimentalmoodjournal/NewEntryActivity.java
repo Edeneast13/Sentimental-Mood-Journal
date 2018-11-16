@@ -1,9 +1,5 @@
 package edeneastapps.sentimentalmoodjournal;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +27,9 @@ public class NewEntryActivity extends AppCompatActivity {
 
     @BindView(R.id.new_entry_done_button)
     ImageView mDoneButton;
+
+    @BindView(R.id.title_input)
+    TextView mTitle;
 
     private boolean mIsChanged = false;
     int mSelectedMood = 2;
@@ -135,7 +134,7 @@ public class NewEntryActivity extends AppCompatActivity {
         Entry entry = new Entry();
         entry.setTimestamp(returnTimeCreated(calendar));
         entry.setDatestamp(returnDateCreated(calendar));
-        entry.setTitle("Test Title");
+        entry.setTitle(mTitle.getText().toString());
         entry.setContent(mEntryInput.getText().toString());
         entry.setMood(mSelectedMood);
         postSentiment(entry);

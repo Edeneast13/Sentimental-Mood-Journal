@@ -56,9 +56,55 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/title_card"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:outlineProvider="bounds"
+        android:elevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/new_entry_toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/new_entry_mood_card"
+        android:background="@drawable/rounded_add_entry_card">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textColor="@color/alternateText"
+            android:textSize="18sp"
+            android:id="@+id/title_title_text"
+            android:fontFamily="sans-serif-medium"
+            android:padding="8dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/title_title_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/title_input"
+            android:hint="Pick a cool title..."
+            android:textColorHint="@android:color/darker_gray"
+            android:fontFamily="sans-serif-medium"
+            android:padding="16dp"
+            android:inputType="textMultiLine"
+            android:lineSpacingExtra="4dp"
+            android:background="@android:color/transparent"
+            android:textColor="@color/alternateText"
+            android:textSize="16sp"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="110dp"
         android:id="@+id/new_entry_mood_card"
-        app:layout_constraintTop_toBottomOf="@id/new_entry_toolbar"
+        app:layout_constraintTop_toBottomOf="@id/title_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/new_entry_input_card"
         android:layout_margin="10dp"
         android:outlineProvider="bounds"
         android:elevation="4dp"
@@ -93,35 +139,44 @@
                 android:layout_height="45dp"
                 android:layout_weight="1"
                 android:id="@+id/angry_button"
-                android:src="@mipmap/ic_angry_emoji"/>
+                android:src="@mipmap/ic_angry_emoji"
+                android:tint="@android:color/holo_red_dark"/>
 
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
+                android:padding="2dp"
+                android:tint="@android:color/holo_orange_dark"
                 android:id="@+id/sad_button"
-                android:src="@mipmap/ic_angry_emoji"/>
+                android:src="@mipmap/ic_sad_emoji"/>
 
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
+                android:padding="4dp"
                 android:id="@+id/confused_button"
-                android:src="@mipmap/ic_angry_emoji"/>
+                android:tint="@android:color/holo_orange_light"
+                android:src="@mipmap/ic_confused_emoji"/>
 
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
                 android:id="@+id/content_button"
-                android:src="@mipmap/ic_angry_emoji"/>
+                android:padding="4dp"
+                android:tint="@android:color/holo_blue_light"
+                android:src="@mipmap/ic_okay_emoji"/>
 
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
                 android:id="@+id/happy_button"
-                android:src="@mipmap/ic_angry_emoji"/>
+                android:src="@mipmap/ic_happy_emoji"
+                android:padding="4dp"
+                android:tint="@android:color/holo_blue_dark"/>
         </LinearLayout>
 
 
