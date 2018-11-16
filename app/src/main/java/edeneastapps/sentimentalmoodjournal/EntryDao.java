@@ -23,6 +23,9 @@ public interface EntryDao {
     @Query("SELECT * FROM entries WHERE datestamp = :dateStamp")
     LiveData<List<Entry>> findByDateCreated(String dateStamp);
 
+    @Query("UPDATE entries SET sentimentScore = :score, sentimentRatio = :ratio, sentimentType = :type WHERE id = :id")
+    void updateSentimentById(int id, String score, String ratio, String type);
+
     @Update
     void updateEntry(Entry entry);
 

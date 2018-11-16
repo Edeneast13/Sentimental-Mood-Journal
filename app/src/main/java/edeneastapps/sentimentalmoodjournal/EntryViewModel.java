@@ -41,4 +41,8 @@ public class EntryViewModel extends AndroidViewModel {
     void updateEntry(final Entry entry){
         mExecutorService.execute(() -> mEntryDao.updateEntry(entry));
     }
+
+    void updateSentimentById(final Entry entry){
+        mExecutorService.execute(() -> mEntryDao.updateSentimentById(entry.getId(), entry.getSentimentScore(), entry.getSentimentRatio(), entry.getSentimentType()));
+    }
 }

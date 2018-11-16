@@ -1,6 +1,10 @@
 package edeneastapps.sentimentalmoodjournal;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +20,9 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NewEntryActivity extends AppCompatActivity {
 
@@ -131,9 +138,7 @@ public class NewEntryActivity extends AppCompatActivity {
         entry.setTitle("Test Title");
         entry.setContent(mEntryInput.getText().toString());
         entry.setMood(mSelectedMood);
-        mEntryViewModel.addEntry(entry);
-        startNetworkService(entry);
-        super.onBackPressed();
+        postSentiment(entry);
     }
 
     String returnDateCreated(Calendar calendar){
@@ -146,10 +151,28 @@ public class NewEntryActivity extends AppCompatActivity {
         return time + " " + amOrPm;
     }
 
-    void startNetworkService(Entry entry){
-        Intent intent = new Intent(this, TwinWorldNetworkService.class);
-        intent.setClass(this, TwinWorldNetworkService.class);
-        intent.putExtra("entry", entry);
-        startService(intent);
+    void postSentiment(Entry entry){
+        TwinWorldInterface restService = TwinWorldClient.getClient().create(TwinWorldInterface.class);
+        restService.postSentiment(entry.getContent()).enqueue(new Callback<TwinWorldSentimentResult>() {
+            @Override
+            public void onResponse(@NonNull Call<TwinWorldSentimentResult> call, @NonNull Response<TwinWorldSentimentResult> response) {
+                if (response.isSuccessful()){
+                    entry.setSentimentType(response.body().getType());
+                    entry.setSentimentScore(response.body().getScore());
+                    entry.setSentimentRatio(response.body().getRatio());
+                    saveEntry(entry);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TwinWorldSentimentResult> call, @NonNull Throwable t) {
+
+            }
+        });
+    }
+
+    void saveEntry(Entry entry){
+        new EntryViewModel(getApplication()).addEntry(entry);
+        finish();
     }
 }

@@ -41,6 +41,12 @@ public class DashboardActivity extends AppCompatActivity {
         initHorizontalCalendar();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mEntryViewModel.getAllEntries().observe(this, entries -> mAdapter.setData(entries));
+    }
+
     void initViewModel(){
         mEntryViewModel = new EntryViewModel(getApplication());
     }
