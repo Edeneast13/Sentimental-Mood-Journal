@@ -1,6 +1,7 @@
 package edeneastapps.sentimentalmoodjournal;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -67,11 +68,13 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
             }
         }
 
-        GradientDrawable shape = new GradientDrawable();
-        shape.setCornerRadius(25);
-        shape.setColor(mContext.getResources().getColor(Utils.returnSentimentRangeColor(Float.parseFloat(mEntryList.get(i).getSentimentScore()))));
-        entryViewHolder.layout.setBackground(shape);
-        entryViewHolder.layout.setElevation(4);
+        Utils.configCardLayout(mContext, entryViewHolder.layout, mEntryList.get(i).getSentimentColor());
+
+        entryViewHolder.layout.setOnClickListener(view -> {
+            Intent intent = new Intent(mContext, EntryDetailActivity.class);
+            intent.putExtra("entry", mEntryList.get(i));
+            mContext.startActivity(intent);
+        });
     }
 
     @Override

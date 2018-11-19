@@ -21,6 +21,7 @@ public class Entry implements Parcelable{
     private String sentimentType;
     private String sentimentScore;
     private String sentimentRatio;
+    private int sentimentColor;
 
     Entry(){ }
 
@@ -96,6 +97,14 @@ public class Entry implements Parcelable{
         this.sentimentRatio = sentimentRatio;
     }
 
+    public int getSentimentColor() {
+        return sentimentColor;
+    }
+
+    public void setSentimentColor(int sentimentColor) {
+        this.sentimentColor = sentimentColor;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -104,14 +113,16 @@ public class Entry implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
-        parcel.writeInt(mood);
         parcel.writeString(timestamp);
         parcel.writeString(datestamp);
         parcel.writeString(content);
         parcel.writeString(title);
-        parcel.writeString(sentimentRatio);
-        parcel.writeString(sentimentScore);
+        parcel.writeInt(mood);
         parcel.writeString(sentimentType);
+        parcel.writeString(sentimentScore);
+        parcel.writeString(sentimentRatio);
+        parcel.writeInt(sentimentColor);
+
     }
 
     /**
@@ -130,14 +141,15 @@ public class Entry implements Parcelable{
      * retrieves packaged parcelable content
      */
     private Entry(Parcel parcel){
-        title = parcel.readString();
+        id = parcel.readInt();
         timestamp = parcel.readString();
         datestamp = parcel.readString();
         content = parcel.readString();
-        sentimentRatio = parcel.readString();
-        sentimentScore = parcel.readString();
-        sentimentType = parcel.readString();
-        id = parcel.readInt();
+        title = parcel.readString();
         mood = parcel.readInt();
+        sentimentType = parcel.readString();
+        sentimentScore = parcel.readString();
+        sentimentRatio = parcel.readString();
+        sentimentColor = parcel.readInt();
     }
 }

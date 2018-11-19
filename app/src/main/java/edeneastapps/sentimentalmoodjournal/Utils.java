@@ -1,5 +1,11 @@
 package edeneastapps.sentimentalmoodjournal;
 
+import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
+import android.support.constraint.ConstraintLayout;
+
+import java.util.List;
+
 public class Utils {
     public static int returnSentimentRangeColor(float score){
         if (score >= .08f){
@@ -32,5 +38,43 @@ public class Utils {
         else{
             return R.color.orange500;
         }
+    }
+
+    public static float returnSentimentScoreAverage(List<Float> scores){
+        float average = 0;
+        for (int i = 0; i < scores.size(); i++) {
+            average = average + scores.get(i);
+        }
+        return average / scores.size();
+    }
+
+    public static void configCardLayout(Context context, ConstraintLayout layout, int color){
+        GradientDrawable shape = new GradientDrawable();
+        shape.setCornerRadius(25);
+        shape.setColor(context.getResources().getColor(color));
+        layout.setBackground(shape);
+        layout.setElevation(4);
+    }
+
+    public static int returnMoodIconWhite(int mood){
+        int id = 0;
+        switch (mood){
+            case 0:
+                id = R.mipmap.ic_angry_icon_white;
+                break;
+            case 1:
+                id = R.mipmap.ic_sad_emoji_white;
+                break;
+            case 3:
+                id = R.mipmap.ic_confused_emoji_white;
+                break;
+            case 4:
+                id = R.mipmap.ic_angry_icon_white;
+                break;
+            case 5:
+                id = R.mipmap.ic_angry_icon_white;
+                break;
+        }
+        return id;
     }
 }

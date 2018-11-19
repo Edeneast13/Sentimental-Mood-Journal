@@ -1,5 +1,6 @@
 package edeneastapps.sentimentalmoodjournal;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -159,6 +160,7 @@ public class NewEntryActivity extends AppCompatActivity {
                     entry.setSentimentType(response.body().getType());
                     entry.setSentimentScore(response.body().getScore());
                     entry.setSentimentRatio(response.body().getRatio());
+                    entry.setSentimentColor(Utils.returnSentimentRangeColor(Float.parseFloat(response.body().getScore())));
                     saveEntry(entry);
                 }
             }

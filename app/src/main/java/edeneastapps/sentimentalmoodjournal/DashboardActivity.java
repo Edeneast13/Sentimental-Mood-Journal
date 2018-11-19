@@ -1,6 +1,8 @@
 package edeneastapps.sentimentalmoodjournal;
 
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +38,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     EntryViewModel mEntryViewModel;
     EntryAdapter mAdapter;
+    HorizontalCalendarAdapter mCalendarAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +47,8 @@ public class DashboardActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         initViewModel();
-        initAdapter();
         initHorizontalCalendar();
+        initAdapter();
 
         mToolbar.setElevation(8);
     }
@@ -70,7 +75,7 @@ public class DashboardActivity extends AppCompatActivity {
         calendar.setTime(new Date());
         int currentMonth = calendar.get(Calendar.MONTH);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        HorizontalCalendarAdapter adapter =
+        mCalendarAdapter =
                 new HorizontalCalendarAdapter(getApplicationContext(),
                         new HorizontalCalendarProperties(HorizontalCalendarUtils.calculateMonthLength(currentMonth), currentMonth, calendar.get(Calendar.YEAR)),
                         (view, dateStamp, position) -> {
@@ -84,7 +89,7 @@ public class DashboardActivity extends AppCompatActivity {
         int centeredItemPosition = totalVisibleItems / 2;
         mCalendarRecycler.smoothScrollToPosition(calendar.get(Calendar.DAY_OF_MONTH));
         mCalendarRecycler.setScrollY(centeredItemPosition);
-        mCalendarRecycler.setAdapter(adapter);
+        mCalendarRecycler.setAdapter(mCalendarAdapter);
     }
 
     private void scrollToCenter(View view, LinearLayoutManager layoutManager) {
