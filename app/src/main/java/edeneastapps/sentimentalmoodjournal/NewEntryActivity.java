@@ -33,15 +33,15 @@ public class NewEntryActivity extends AppCompatActivity {
     TextView mTitle;
 
     private boolean mIsChanged = false;
-    int mSelectedMood = 2;
+    int mSelectedMood = 0;
     EntryViewModel mEntryViewModel;
 
     //should enum this
-    final int ANGER = 1;
-    final int SAD = 2;
-    final int CONFUSED = 3;
-    final int CONTENT = 4;
-    final int HAPPY = 5;
+    final int ANGER = 0;
+    final int SAD = 1;
+    final int CONFUSED = 2;
+    final int CONTENT = 3;
+    final int HAPPY = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
