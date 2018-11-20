@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -36,6 +37,12 @@ public class DashboardActivity extends AppCompatActivity {
     @BindView(R.id.dashboard_toolbar)
     ConstraintLayout mToolbar;
 
+    @BindView(R.id.menu_recycler)
+    RecyclerView mMenuRecycler;
+
+    @BindView(R.id.menu_layout)
+    ConstraintLayout mMenuLayout;
+
     EntryViewModel mEntryViewModel;
     EntryAdapter mAdapter;
     HorizontalCalendarAdapter mCalendarAdapter;
@@ -49,8 +56,10 @@ public class DashboardActivity extends AppCompatActivity {
         initViewModel();
         initHorizontalCalendar();
         initAdapter();
+        initMenu();
 
         mToolbar.setElevation(8);
+        mMenuLayout.setElevation(12);
     }
 
     @Override
@@ -68,6 +77,16 @@ public class DashboardActivity extends AppCompatActivity {
         mEntryRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mEntryRecycler.setAdapter(mAdapter);
         mEntryViewModel.getAllEntries().observe(this, entries -> mAdapter.setData(entries));
+    }
+
+    void initMenu(){
+        List<MenuItem> items = new ArrayList<>();
+        items.add(new MenuItem("Statistics", R.color.colorAccent, R.color.primaryText));
+        items.add(new MenuItem("Settings", R.color.colorAccent, R.color.primaryText));
+        MenuAdapter adapter = new MenuAdapter(this, items);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mMenuRecycler.setLayoutManager(layoutManager);
+        mMenuRecycler.setAdapter(adapter);
     }
 
     void initHorizontalCalendar(){
@@ -103,9 +122,28 @@ public class DashboardActivity extends AppCompatActivity {
         mEntryViewModel.getByDateCreated(dateStamp).observe(this, entries -> mAdapter.setData(entries));
     }
 
+    void setMenuVisibility(){
+        if(mMenuLayout.getVisibility() == View.GONE){
+            mMenuLayout.setVisibility(View.VISIBLE);
+        }
+        else{
+            mMenuLayout.setVisibility(View.GONE);
+        }
+    }
+
     @OnClick(R.id.entry_add_button)
     void setEntryAddButton(){
         startActivity(new Intent(DashboardActivity.this, NewEntryActivity.class));
         overridePendingTransition(0, 0);
+    }
+
+    @OnClick(R.id.menu_button)
+    void setMenuButtonListener(){
+        setMenuVisibility();
+    }
+
+    @OnClick(R.id.menu_close_button)
+    void setMenuCloseButtonListener(){
+        setMenuVisibility();
     }
 }
