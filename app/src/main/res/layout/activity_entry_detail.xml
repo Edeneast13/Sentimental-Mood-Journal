@@ -123,15 +123,29 @@
                     android:fontFamily="sans-serif-medium"/>
             </android.support.constraint.ConstraintLayout>
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_button"
+                android:text="Edit"
+                android:background="@color/cardBackground"
+                android:textColor="@color/alternateText"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toBottomOf="@id/entry_detail_layout"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/entry_detail_layout">
+                app:layout_constraintTop_toBottomOf="@id/edit_button">
             </android.support.constraint.ConstraintLayout>
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
-
 </android.support.constraint.ConstraintLayout>

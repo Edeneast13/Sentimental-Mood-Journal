@@ -1,25 +1,20 @@
 package edeneastapps.sentimentalmoodjournal;
 
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
-import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.anychart.AnyChart;
-import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Cartesian;
-import com.anychart.charts.Pie;
-import com.anychart.core.cartesian.series.Column;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +29,9 @@ public class EntryDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.entry_detail_toolbar)
     ConstraintLayout mToolbar;
+
+    @BindView(R.id.entry_detail_toolbar_title)
+    TextView mToolbarTitle;
 
     @BindView(R.id.entry_detail_content)
     TextView mEntryContent;
@@ -50,6 +48,9 @@ public class EntryDetailActivity extends AppCompatActivity {
     @BindView(R.id.entry_detail_title)
     TextView mEntryTitle;
 
+    @BindView(R.id.edit_button)
+    Button mEditButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,8 @@ public class EntryDetailActivity extends AppCompatActivity {
         mToolbar.setElevation(8);
 
         setEntry(getEntry());
+
+        Utils.configCardLayout(this, mEditButton, R.color.cardBackground);
     }
 
     void initAdapter(){
@@ -69,6 +72,7 @@ public class EntryDetailActivity extends AppCompatActivity {
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(mChartRecycler);
         mChartRecycler.setAdapter(chartAdapter);
+        mChartRecycler.addItemDecoration(new CircleRecyclerViewDecoration());
         chartAdapter.setData(getMockChartData());
     }
 
@@ -109,11 +113,27 @@ public class EntryDetailActivity extends AppCompatActivity {
         mEntryTime.setText(entry.getTimestamp());
         mEntryTitle.setText(entry.getTitle());
         mEntryEmotion.setImageResource(Utils.returnMoodIconWhite(entry.getMood()));
+        mToolbarTitle.setText(entry.getTitle());
         Utils.configCardLayout(this, mEntryLayout, entry.getSentimentColor());
     }
 
     @OnClick(R.id.entry_detail_back_button)
     void setBackButtonListener(){
         finish();
+    }
+
+    @OnClick(R.id.edit_button)
+    void setEditButtonListener(){
+        new AlertDialog.Builder(EntryDetailActivity.this)
+                .setTitle("Edit Entry")
+                .setMessage("Keep in mind that editing your journal entries does not calculate a new sentiment or emotional analysis.")
+                .setPositiveButton("Edit", (dialogInterface, i) -> {
+                    Intent intent = new Intent(this, EditActivity.class);
+                    intent.putExtra("entry", getEntry());
+                    startActivity(intent);
+                })
+                .setNegativeButton("CANCEL", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                }).show();
     }
 }

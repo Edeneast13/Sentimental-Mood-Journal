@@ -3,6 +3,7 @@ package edeneastapps.sentimentalmoodjournal;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.constraint.ConstraintLayout;
+import android.view.View;
 
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class Utils {
         return average / scores.size();
     }
 
-    public static void configCardLayout(Context context, ConstraintLayout layout, int color){
+    public static void configCardLayout(Context context, View layout, int color){
         GradientDrawable shape = new GradientDrawable();
         shape.setCornerRadius(25);
         shape.setColor(context.getResources().getColor(color));

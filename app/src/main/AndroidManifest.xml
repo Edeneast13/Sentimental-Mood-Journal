@@ -41,6 +41,11 @@
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
 
+        <activity
+            android:name=".EditActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:parentActivityName=".EntryDetailActivity">
+        </activity>
     </application>
 
 </manifest>
