@@ -146,10 +146,10 @@ public class DashboardActivity extends AppCompatActivity {
         mEntryViewModel.getByDateCreated(dateStamp).observe(this, new Observer<List<Entry>>() {
             @Override
             public void onChanged(@Nullable List<Entry> entries) {
+                mEmptyLayout.setVisibility(View.GONE);
                 mEntryAdapter.setData(entries);
-                if (entries.size() == 0){
-                    Utils.toggleViewVisibility(mEmptyLayout);
-                    Utils.toggleViewVisibility(mEntryRecycler);
+                if (entries.isEmpty()){
+                    mEmptyLayout.setVisibility(View.VISIBLE);
                 }
             }
         });
