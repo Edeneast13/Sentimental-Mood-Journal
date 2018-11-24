@@ -122,7 +122,6 @@ public class Entry implements Parcelable{
         parcel.writeString(sentimentScore);
         parcel.writeString(sentimentRatio);
         parcel.writeInt(sentimentColor);
-
     }
 
     /**

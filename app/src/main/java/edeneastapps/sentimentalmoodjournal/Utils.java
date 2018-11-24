@@ -3,6 +3,7 @@ package edeneastapps.sentimentalmoodjournal;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.constraint.ConstraintLayout;
+import android.util.Log;
 import android.view.View;
 
 import java.util.List;
@@ -77,5 +78,31 @@ public class Utils {
                 break;
         }
         return id;
+    }
+
+    /**
+     * toggle between gone and visible
+     * @param view
+     */
+    public static void toggleViewVisibility(View view){
+        if(view.getVisibility() == View.GONE){
+            view.setVisibility(View.VISIBLE);
+        }
+        else{
+            view.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * formant of mm/dd/yyyy
+     * @param day
+     * @param month
+     * @param year
+     * @return
+     */
+    public static String returnStringDate(int month, int day, int year){
+        String date = month + "/" + day + "/" + year;
+        Log.i("entrycreateddate:: ", date);
+        return date;
     }
 }

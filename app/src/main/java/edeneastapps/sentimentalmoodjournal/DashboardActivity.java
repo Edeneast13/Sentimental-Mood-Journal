@@ -2,6 +2,7 @@ package edeneastapps.sentimentalmoodjournal;
 
 import android.arch.lifecycle.Observer;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -11,8 +12,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
-import android.util.Log;
 import android.view.View;
+import android.widget.CalendarView;
+import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,8 +45,17 @@ public class DashboardActivity extends AppCompatActivity {
     @BindView(R.id.menu_layout)
     ConstraintLayout mMenuLayout;
 
+    @BindView(R.id.calendar_full)
+    CalendarView mCalendarFull;
+
+    @BindView(R.id.calendar_layout)
+    FrameLayout mCalendarLayout;
+
+    @BindView(R.id.empty_layout)
+    ConstraintLayout mEmptyLayout;
+
     EntryViewModel mEntryViewModel;
-    EntryAdapter mAdapter;
+    EntryAdapter mEntryAdapter;
     HorizontalCalendarAdapter mCalendarAdapter;
 
     @Override
@@ -57,6 +68,7 @@ public class DashboardActivity extends AppCompatActivity {
         initHorizontalCalendar();
         initAdapter();
         initMenu();
+        initFullCalendar();
 
         mToolbar.setElevation(8);
         mMenuLayout.setElevation(12);
@@ -65,7 +77,7 @@ public class DashboardActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mEntryViewModel.getAllEntries().observe(this, entries -> mAdapter.setData(entries));
+        mEntryViewModel.getAllEntries().observe(this, entries -> mEntryAdapter.setData(entries));
     }
 
     void initViewModel(){
@@ -73,10 +85,11 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     void initAdapter(){
-        mAdapter = new EntryAdapter(getApplicationContext());
+        mEntryAdapter = new EntryAdapter(getApplicationContext());
         mEntryRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        mEntryRecycler.setAdapter(mAdapter);
-        mEntryViewModel.getAllEntries().observe(this, entries -> mAdapter.setData(entries));
+        mEntryRecycler.setAdapter(mEntryAdapter);
+        mEntryViewModel.getAllEntries().observe(this, entries ->
+                mEntryAdapter.setData(entries));
     }
 
     void initMenu(){
@@ -112,6 +125,17 @@ public class DashboardActivity extends AppCompatActivity {
         mCalendarRecycler.setAdapter(mCalendarAdapter);
     }
 
+    void initFullCalendar(){
+        mCalendarFull.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
+                String selectedDate = Utils.returnStringDate(month, day, year);
+                updateEntries(selectedDate);
+                mCalendarRecycler.smoothScrollToPosition(day);
+            }
+        });
+    }
+
     private void scrollToCenter(View view, LinearLayoutManager layoutManager) {
         int itemToScroll = mCalendarRecycler.getChildPosition(view);
         int centerOfScreen = mCalendarRecycler.getWidth() / 2 - view.getWidth() / 2;
@@ -119,16 +143,16 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     void updateEntries(String dateStamp){
-        mEntryViewModel.getByDateCreated(dateStamp).observe(this, entries -> mAdapter.setData(entries));
-    }
-
-    void setMenuVisibility(){
-        if(mMenuLayout.getVisibility() == View.GONE){
-            mMenuLayout.setVisibility(View.VISIBLE);
-        }
-        else{
-            mMenuLayout.setVisibility(View.GONE);
-        }
+        mEntryViewModel.getByDateCreated(dateStamp).observe(this, new Observer<List<Entry>>() {
+            @Override
+            public void onChanged(@Nullable List<Entry> entries) {
+                mEntryAdapter.setData(entries);
+                if (entries.size() == 0){
+                    Utils.toggleViewVisibility(mEmptyLayout);
+                    Utils.toggleViewVisibility(mEntryRecycler);
+                }
+            }
+        });
     }
 
     @OnClick(R.id.entry_add_button)
@@ -139,11 +163,17 @@ public class DashboardActivity extends AppCompatActivity {
 
     @OnClick(R.id.menu_button)
     void setMenuButtonListener(){
-        setMenuVisibility();
+        Utils.toggleViewVisibility(mMenuLayout);
     }
 
     @OnClick(R.id.menu_close_button)
     void setMenuCloseButtonListener(){
-        setMenuVisibility();
+        Utils.toggleViewVisibility(mMenuLayout);
+    }
+
+    @OnClick(R.id.calendar_button)
+    void setCalendarFullButton(){
+        Utils.toggleViewVisibility(mCalendarRecycler);
+        Utils.toggleViewVisibility(mCalendarLayout);
     }
 }

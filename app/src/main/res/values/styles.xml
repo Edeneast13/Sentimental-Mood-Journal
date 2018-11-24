@@ -8,4 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="CalendarFullLightTheme" parent="android:Widget.CalendarView">
+        <item name="android:background">@color/backgroundDark</item>
+        <item name="android:focusedMonthDateColor">@color/colorPrimary</item>
+        <item name="android:weekNumberColor">@color/alternateText</item>
+        <item name="android:weekDayTextAppearance">@style/CalenderFullWeekTextLight</item>
+        <item name="android:dateTextAppearance">@style/CalendarFullDateTextLight</item>
+    </style>
+
+    <style name="CalendarFullDateTextLight" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/alternateText</item>
+    </style>
+
+    <style name="CalenderFullWeekTextLight" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/alternateText</item>
+    </style>
+
 </resources>

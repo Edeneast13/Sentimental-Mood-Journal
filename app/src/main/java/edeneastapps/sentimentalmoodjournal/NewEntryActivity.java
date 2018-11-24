@@ -1,6 +1,5 @@
 package edeneastapps.sentimentalmoodjournal;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -69,36 +68,6 @@ public class NewEntryActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.new_entry_done_button)
-    void setDoneButtonListener(){
-        saveEntry();
-    }
-
-    @OnClick(R.id.angry_button)
-    void setAngryButtonListener(){
-        mSelectedMood = ANGER;
-    }
-
-    @OnClick(R.id.sad_button)
-    void setSadButtonListener(){
-        mSelectedMood = SAD;
-    }
-
-    @OnClick(R.id.confused_button)
-    void setConfusedButtonListener(){
-        mSelectedMood = CONFUSED;
-    }
-
-    @OnClick(R.id.content_button)
-    void setContentButtonListener(){
-        mSelectedMood = CONTENT;
-    }
-
-    @OnClick(R.id.happy_button)
-    void setHappyButtonListener(){
-        mSelectedMood = HAPPY;
-    }
-
     void watchEntryInput(){
         mEntryInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -134,15 +103,11 @@ public class NewEntryActivity extends AppCompatActivity {
         calendar.setTime(new Date());
         Entry entry = new Entry();
         entry.setTimestamp(returnTimeCreated(calendar));
-        entry.setDatestamp(returnDateCreated(calendar));
+        entry.setDatestamp(Utils.returnStringDate(calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
         entry.setTitle(mTitle.getText().toString());
         entry.setContent(mEntryInput.getText().toString());
         entry.setMood(mSelectedMood);
         postSentiment(entry);
-    }
-
-    String returnDateCreated(Calendar calendar){
-        return String.valueOf(calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.YEAR));
     }
 
     String returnTimeCreated(Calendar calendar){
@@ -175,5 +140,35 @@ public class NewEntryActivity extends AppCompatActivity {
     void saveEntry(Entry entry){
         new EntryViewModel(getApplication()).addEntry(entry);
         finish();
+    }
+
+    @OnClick(R.id.new_entry_done_button)
+    void setDoneButtonListener(){
+        saveEntry();
+    }
+
+    @OnClick(R.id.angry_button)
+    void setAngryButtonListener(){
+        mSelectedMood = ANGER;
+    }
+
+    @OnClick(R.id.sad_button)
+    void setSadButtonListener(){
+        mSelectedMood = SAD;
+    }
+
+    @OnClick(R.id.confused_button)
+    void setConfusedButtonListener(){
+        mSelectedMood = CONFUSED;
+    }
+
+    @OnClick(R.id.content_button)
+    void setContentButtonListener(){
+        mSelectedMood = CONTENT;
+    }
+
+    @OnClick(R.id.happy_button)
+    void setHappyButtonListener(){
+        mSelectedMood = HAPPY;
     }
 }
