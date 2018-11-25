@@ -6,7 +6,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
@@ -125,6 +127,7 @@ public class DashboardActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         setCalenderProperties(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+        HorizontalCalendarLayoutManager layoutManager = new HorizontalCalendarLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         HorizontalCalendarAdapter.OnEndReachedListener onEndReachedListener = new HorizontalCalendarAdapter.OnEndReachedListener() {
             @Override
             public void onEndReached() {
@@ -135,7 +138,6 @@ public class DashboardActivity extends AppCompatActivity {
                 else{
                     getCalendarProperties().setMonthAtEnd(monthAtEnd - 1);
                 }
-                Log.i("HC END:: ", getCalendarProperties().getMonthAtEnd() + "");
                 mCalendarAdapter.addItemsAtTop(getCalendarItems(getCalendarProperties().getMonthAtEnd(), getCalendarProperties().getCurrentYear()));
             }
 
@@ -148,19 +150,20 @@ public class DashboardActivity extends AppCompatActivity {
                 else{
                     getCalendarProperties().setMonthAtStart(monthAtStart + 1);
                 }
-                Log.i("HC START:: ", getCalendarProperties().getMonthAtStart() + "");
                 mCalendarAdapter.addItemsAtBottom(getCalendarItems(getCalendarProperties().getMonthAtStart(), getCalendarProperties().getCurrentYear()));
             }
         };
         HorizontalCalendarAdapter.OnDaySelectedListener onDaySelectedListener = new HorizontalCalendarAdapter.OnDaySelectedListener() {
             @Override
             public void OnDaySelected(View view, String date, int position) {
-
+                updateEntries(date);
+                scrollToCenter(view, layoutManager);
             }
         };
-        HorizontalCalendarLayoutManager layoutManager = new HorizontalCalendarLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mCalendarAdapter = new HorizontalCalendarAdapter(this, onDaySelectedListener, onEndReachedListener);
         mCalendarRecycler.setLayoutManager(layoutManager);
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(mCalendarRecycler);
         mCalendarRecycler.setAdapter(mCalendarAdapter);
         mCalendarAdapter.setData(getCalendarItems(getCalendarProperties().getCurrentMonth(), getCalendarProperties().getCurrentYear()));
     }

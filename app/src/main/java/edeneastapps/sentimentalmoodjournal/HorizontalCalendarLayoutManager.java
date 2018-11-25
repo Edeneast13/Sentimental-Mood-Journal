@@ -67,6 +67,11 @@ public class HorizontalCalendarLayoutManager extends LinearLayoutManager {
         } else {
             return 0;
         }
+    }
 
+    @Override
+    public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+        super.onLayoutChildren(recycler, state);
+        scrollHorizontallyBy(0, recycler, state);
     }
 }
