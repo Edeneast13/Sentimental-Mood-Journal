@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.FrameLayout;
@@ -128,24 +129,26 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onEndReached() {
                 int monthAtEnd = getCalendarProperties().getMonthAtEnd();
-                if(monthAtEnd == 12){
-                    getCalendarProperties().setMonthAtEnd(1);
+                if(monthAtEnd == 0){
+                    getCalendarProperties().setMonthAtEnd(11);
                 }
                 else{
-                    getCalendarProperties().setMonthAtEnd(monthAtEnd++);
+                    getCalendarProperties().setMonthAtEnd(monthAtEnd - 1);
                 }
+                Log.i("HC END:: ", getCalendarProperties().getMonthAtEnd() + "");
                 mCalendarAdapter.addItemsAtTop(getCalendarItems(getCalendarProperties().getMonthAtEnd(), getCalendarProperties().getCurrentYear()));
             }
 
             @Override
             public void onStartReached() {
                 int monthAtStart = getCalendarProperties().getMonthAtStart();
-                if(monthAtStart == 1){
-                    getCalendarProperties().setMonthAtStart(12);
+                if(monthAtStart == 11){
+                    getCalendarProperties().setMonthAtStart(0);
                 }
                 else{
-                    getCalendarProperties().setMonthAtStart(monthAtStart--);
+                    getCalendarProperties().setMonthAtStart(monthAtStart + 1);
                 }
+                Log.i("HC START:: ", getCalendarProperties().getMonthAtStart() + "");
                 mCalendarAdapter.addItemsAtBottom(getCalendarItems(getCalendarProperties().getMonthAtStart(), getCalendarProperties().getCurrentYear()));
             }
         };

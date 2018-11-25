@@ -108,7 +108,7 @@ public class HorizontalCalendarAdapter extends RecyclerView.Adapter<HorizontalCa
             return;
         }
 
-        Collections.reverse(topList);
+      //  Collections.reverse(topList);
         mData.addAll(0, topList);
         notifyItemRangeInserted(0, topList.size());
     }
