@@ -1,17 +1,12 @@
 package edeneastapps.sentimentalmoodjournal;
 
-import android.arch.lifecycle.Observer;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.FrameLayout;
@@ -57,6 +52,7 @@ public class DashboardActivity extends AppCompatActivity {
     EntryViewModel mEntryViewModel;
     EntryAdapter mEntryAdapter;
     HorizontalCalendarAdapter mCalendarAdapter;
+    HorizontalCalendarProperties mCalendarProperties;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,37 +98,96 @@ public class DashboardActivity extends AppCompatActivity {
         mMenuRecycler.setAdapter(adapter);
     }
 
+//    void initHorizontalCalendar(){
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTime(new Date());
+//        int currentMonth = calendar.get(Calendar.MONTH);
+//        HorizontalCalendarLayoutManager layoutManager = new HorizontalCalendarLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+//        mCalendarAdapter =
+//                new HorizontalCalendarAdapter(getApplicationContext(),
+//                        new HorizontalCalendarProperties(HorizontalCalendarUtils.calculateMonthLength(currentMonth), currentMonth, calendar.get(Calendar.YEAR)),
+//                        (view, dateStamp, position) -> {
+//                            updateEntries(dateStamp);
+//                            scrollToCenter(view, layoutManager);
+//                        });
+//        mCalendarRecycler.setLayoutManager(layoutManager);
+//        SnapHelper snapHelper = new LinearSnapHelper();
+//        snapHelper.attachToRecyclerView(mCalendarRecycler);
+//        int totalVisibleItems = layoutManager.findFirstVisibleItemPosition() - layoutManager.findLastVisibleItemPosition();
+//        int centeredItemPosition = totalVisibleItems / 2;
+//        mCalendarRecycler.smoothScrollToPosition(calendar.get(Calendar.DAY_OF_MONTH));
+//        mCalendarRecycler.setScrollY(centeredItemPosition);
+//        mCalendarRecycler.setAdapter(mCalendarAdapter);
+//    }
+
     void initHorizontalCalendar(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        int currentMonth = calendar.get(Calendar.MONTH);
+        setCalenderProperties(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+        HorizontalCalendarAdapter.OnEndReachedListener onEndReachedListener = new HorizontalCalendarAdapter.OnEndReachedListener() {
+            @Override
+            public void onEndReached() {
+                int monthAtEnd = getCalendarProperties().getMonthAtEnd();
+                if(monthAtEnd == 12){
+                    getCalendarProperties().setMonthAtEnd(1);
+                }
+                else{
+                    getCalendarProperties().setMonthAtEnd(monthAtEnd++);
+                }
+                mCalendarAdapter.addItemsAtTop(getCalendarItems(getCalendarProperties().getMonthAtEnd(), getCalendarProperties().getCurrentYear()));
+            }
+
+            @Override
+            public void onStartReached() {
+                int monthAtStart = getCalendarProperties().getMonthAtStart();
+                if(monthAtStart == 1){
+                    getCalendarProperties().setMonthAtStart(12);
+                }
+                else{
+                    getCalendarProperties().setMonthAtStart(monthAtStart--);
+                }
+                mCalendarAdapter.addItemsAtBottom(getCalendarItems(getCalendarProperties().getMonthAtStart(), getCalendarProperties().getCurrentYear()));
+            }
+        };
+        HorizontalCalendarAdapter.OnDaySelectedListener onDaySelectedListener = new HorizontalCalendarAdapter.OnDaySelectedListener() {
+            @Override
+            public void OnDaySelected(View view, String date, int position) {
+
+            }
+        };
         HorizontalCalendarLayoutManager layoutManager = new HorizontalCalendarLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        //LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mCalendarAdapter =
-                new HorizontalCalendarAdapter(getApplicationContext(),
-                        new HorizontalCalendarProperties(HorizontalCalendarUtils.calculateMonthLength(currentMonth), currentMonth, calendar.get(Calendar.YEAR)),
-                        (view, dateStamp, position) -> {
-                            updateEntries(dateStamp);
-                            scrollToCenter(view, layoutManager);
-                        });
+        mCalendarAdapter = new HorizontalCalendarAdapter(this, onDaySelectedListener, onEndReachedListener);
         mCalendarRecycler.setLayoutManager(layoutManager);
-        SnapHelper snapHelper = new LinearSnapHelper();
-        snapHelper.attachToRecyclerView(mCalendarRecycler);
-        int totalVisibleItems = layoutManager.findFirstVisibleItemPosition() - layoutManager.findLastVisibleItemPosition();
-        int centeredItemPosition = totalVisibleItems / 2;
-        mCalendarRecycler.smoothScrollToPosition(calendar.get(Calendar.DAY_OF_MONTH));
-        mCalendarRecycler.setScrollY(centeredItemPosition);
         mCalendarRecycler.setAdapter(mCalendarAdapter);
+        mCalendarAdapter.setData(getCalendarItems(getCalendarProperties().getCurrentMonth(), getCalendarProperties().getCurrentYear()));
+    }
+
+    void setCalenderProperties(int currentMonth, int currentYear){
+        mCalendarProperties = new HorizontalCalendarProperties(currentMonth, currentYear);
+    }
+
+    HorizontalCalendarProperties getCalendarProperties(){
+        return mCalendarProperties;
+    }
+    /**
+     * returns a list of calendar items for the given date and year
+     * @param month
+     * @param year
+     * @return
+     */
+    List<HorizontalCalendarItem> getCalendarItems(int month, int year){
+        List<HorizontalCalendarItem> items = new ArrayList<>();
+        for (int day = 0; day < HorizontalCalendarUtils.calculateMonthLength(month); day++) {
+            items.add(new HorizontalCalendarItem(day + 1, month, R.color.colorPrimary, year));
+        }
+        return items;
     }
 
     void initFullCalendar(){
-        mCalendarFull.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
-                String selectedDate = Utils.returnStringDate(month, day, year);
-                updateEntries(selectedDate);
-                mCalendarRecycler.smoothScrollToPosition(day);
-            }
+        mCalendarFull.setOnDateChangeListener((calendarView, year, month, day) -> {
+            String selectedDate = Utils.returnStringDate(month, day, year);
+            updateEntries(selectedDate);
+            mCalendarRecycler.smoothScrollToPosition(day);
         });
     }
 
@@ -143,14 +198,11 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     void updateEntries(String dateStamp){
-        mEntryViewModel.getByDateCreated(dateStamp).observe(this, new Observer<List<Entry>>() {
-            @Override
-            public void onChanged(@Nullable List<Entry> entries) {
-                mEmptyLayout.setVisibility(View.GONE);
-                mEntryAdapter.setData(entries);
-                if (entries.isEmpty()){
-                    mEmptyLayout.setVisibility(View.VISIBLE);
-                }
+        mEntryViewModel.getByDateCreated(dateStamp).observe(this, entries -> {
+            mEmptyLayout.setVisibility(View.GONE);
+            mEntryAdapter.setData(entries);
+            if (entries.isEmpty()){
+                mEmptyLayout.setVisibility(View.VISIBLE);
             }
         });
     }
