@@ -1,6 +1,7 @@
 package edeneastapps.sentimentalmoodjournal;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,10 @@ import android.support.v7.widget.SnapHelper;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.FrameLayout;
+
+import com.nightonke.boommenu.BoomButtons.HamButton;
+import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+import com.nightonke.boommenu.BoomMenuButton;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,9 +31,6 @@ public class DashboardActivity extends AppCompatActivity {
 
     @BindView(R.id.entry_recycler)
     RecyclerView mEntryRecycler;
-
-    @BindView(R.id.entry_add_button)
-    FloatingActionButton mEntryAddButton;
 
     @BindView(R.id.calender_recycler)
     RecyclerView mCalendarRecycler;
@@ -51,6 +53,9 @@ public class DashboardActivity extends AppCompatActivity {
     @BindView(R.id.empty_layout)
     ConstraintLayout mEmptyLayout;
 
+    @BindView(R.id.bmb)
+    BoomMenuButton mBoomMenuButton;
+
     EntryViewModel mEntryViewModel;
     EntryAdapter mEntryAdapter;
     HorizontalCalendarAdapter mCalendarAdapter;
@@ -67,6 +72,7 @@ public class DashboardActivity extends AppCompatActivity {
         initAdapter();
         initMenu();
         initFullCalendar();
+        initBmB(getMenuItems());
 
         mToolbar.setElevation(8);
         mMenuLayout.setElevation(12);
@@ -103,6 +109,35 @@ public class DashboardActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mMenuRecycler.setLayoutManager(layoutManager);
         mMenuRecycler.setAdapter(adapter);
+    }
+
+    void initBmB(List<Menu> menuItems){
+        for (int i = 0; i < mBoomMenuButton.getPiecePlaceEnum().pieceNumber(); i++) {
+            HamButton.Builder builder = new HamButton.Builder()
+                    .normalImageRes(menuItems.get(i).getDrawable())
+                    .normalTextRes(menuItems.get(i).getTitle())
+                    .subNormalTextRes(menuItems.get(i).getSubText())
+                    .normalColor(getResources().getColor(getMenuItems().get(i).getColor()))
+                    .imagePadding(new Rect(32, 32, 32, 32))
+                    .listener(index -> {
+                        switch (index){
+                            case 0:{
+                                startAddEntryActivity();
+                            }
+                        }
+                    });
+            mBoomMenuButton.addBuilder(builder);
+        }
+
+    }
+
+    List<Menu> getMenuItems(){
+        List<Menu> items = new ArrayList<>();
+        items.add(new Menu(R.string.menu_add_title, R.string.menu_add_subText, R.mipmap.ic_journal_white, R.color.colorPrimary));
+        items.add(new Menu(R.string.menu_stats_title, R.string.menu_stats_subText, R.mipmap.ic_graph_white, R.color.colorPrimary));
+        items.add(new Menu(R.string.menu_rate_title, R.string.menu_rate_subText, R.mipmap.ic_ribbon_white, R.color.colorPrimary));
+        items.add(new Menu(R.string.menu_settings_title, R.string.menu_settings_subText, R.mipmap.ic_settings_white, R.color.colorPrimary));
+        return items;
     }
 
     void initHorizontalCalendar(){
@@ -196,8 +231,13 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick(R.id.entry_add_button)
-    void setEntryAddButton(){
+//    @OnClick(R.id.entry_add_button)
+//    void setEntryAddButton(){
+//        startActivity(new Intent(DashboardActivity.this, NewEntryActivity.class));
+//        overridePendingTransition(0, 0);
+//    }
+
+    void startAddEntryActivity(){
         startActivity(new Intent(DashboardActivity.this, NewEntryActivity.class));
         overridePendingTransition(0, 0);
     }
