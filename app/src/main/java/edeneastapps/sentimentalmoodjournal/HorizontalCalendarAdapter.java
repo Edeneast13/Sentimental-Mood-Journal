@@ -9,9 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,7 +58,8 @@ public class HorizontalCalendarAdapter extends RecyclerView.Adapter<HorizontalCa
                     Utils.returnStringDate(mData.get(position).getMonth(), mData.get(position).getDay(), mData.get(position).getYear()),
                     position);
         });
-        holder.mItemLayout.setBackgroundColor(mContext.getResources().getColor(mData.get(position).getBackgroundColor()));
+
+        HorizontalCalendarUtils.configCalLayout(mContext, holder.mDateLayout, R.color.colorPrimary);
     }
 
     public interface OnDaySelectedListener {
@@ -79,6 +80,8 @@ public class HorizontalCalendarAdapter extends RecyclerView.Adapter<HorizontalCa
         ConstraintLayout mItemLayout;
         @BindView(R.id.select_marker)
         ConstraintLayout mSelectMarker;
+        @BindView(R.id.date_layout)
+        LinearLayout mDateLayout;
         HorizontalCalendarViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

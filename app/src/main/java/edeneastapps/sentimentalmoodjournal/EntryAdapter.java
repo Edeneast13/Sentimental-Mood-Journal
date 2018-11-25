@@ -1,8 +1,6 @@
 package edeneastapps.sentimentalmoodjournal;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -21,9 +19,11 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
 
     private Context mContext;
     private List<Entry> mEntryList;
+    private OnItemSelectedListener mOnItemSelectedListener;
 
-    EntryAdapter(Context context) {
+    EntryAdapter(Context context, OnItemSelectedListener listener) {
         mContext = context;
+        mOnItemSelectedListener = listener;
     }
 
     @NonNull
@@ -33,19 +33,12 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EntryViewHolder entryViewHolder, int i) {
-        entryViewHolder.title.setText(mEntryList.get(i).getTitle());
-        entryViewHolder.content.setText(mEntryList.get(i).getContent());
-        entryViewHolder.time.setText(mEntryList.get(i).getTimestamp());
-//        String score = mEntryList.get(i).getSentimentScore();
-//        if (score != null){
-//            entryViewHolder
-//                    .layout
-//                    .setBackgroundColor(
-//                            mContext.getResources().getColor(Utils.returnSentimentRangeColor(Float.parseFloat(score))));
-//        }
+    public void onBindViewHolder(@NonNull EntryViewHolder entryViewHolder, int pos) {
+        entryViewHolder.title.setText(mEntryList.get(pos).getTitle());
+        entryViewHolder.content.setText(mEntryList.get(pos).getContent());
+        entryViewHolder.time.setText(mEntryList.get(pos).getTimestamp());
 
-        switch (mEntryList.get(i).getMood()){
+        switch (mEntryList.get(pos).getMood()){
             case 0: {
                 entryViewHolder.emotion.setImageResource(R.mipmap.ic_angry_icon_white);
                 break;
@@ -68,12 +61,10 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
             }
         }
 
-        Utils.configCardLayout(mContext, entryViewHolder.layout, mEntryList.get(i).getSentimentColor());
+        Utils.configCardLayout(mContext, entryViewHolder.layout, mEntryList.get(pos).getSentimentColor());
 
         entryViewHolder.layout.setOnClickListener(view -> {
-            Intent intent = new Intent(mContext, EntryDetailActivity.class);
-            intent.putExtra("entry", mEntryList.get(i));
-            mContext.startActivity(intent);
+            mOnItemSelectedListener.OnItemSelected(mEntryList.get(pos));
         });
     }
 
@@ -102,5 +93,9 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
     public void setData(List<Entry> entries){
         this.mEntryList = entries;
         notifyDataSetChanged();
+    }
+
+    public interface OnItemSelectedListener{
+        void OnItemSelected(Entry entry);
     }
 }

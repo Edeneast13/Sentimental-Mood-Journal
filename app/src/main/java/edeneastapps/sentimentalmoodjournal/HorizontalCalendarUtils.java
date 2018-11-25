@@ -1,5 +1,9 @@
 package edeneastapps.sentimentalmoodjournal;
 
+import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
+import android.view.View;
+
 public class HorizontalCalendarUtils {
     public static int calculateMonthLength(int month){
         int monthLength = 0;
@@ -114,5 +118,12 @@ public class HorizontalCalendarUtils {
             }
         }
         return monthName;
+    }
+
+    public static void configCalLayout(Context context, View layout, int color){
+        GradientDrawable shape = new GradientDrawable();
+        shape.setColor(context.getResources().getColor(color));
+        shape.setShape(GradientDrawable.OVAL);
+        layout.setBackground(shape);
     }
 }

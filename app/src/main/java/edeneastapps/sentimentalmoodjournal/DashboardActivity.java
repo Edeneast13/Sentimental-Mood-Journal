@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
-import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.FrameLayout;
@@ -84,7 +83,12 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     void initAdapter(){
-        mEntryAdapter = new EntryAdapter(getApplicationContext());
+        mEntryAdapter = new EntryAdapter(getApplicationContext(), entry -> {
+            Intent intent = new Intent(DashboardActivity.this, EntryDetailActivity.class);
+            intent.putExtra("entry", entry);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+        });
         mEntryRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mEntryRecycler.setAdapter(mEntryAdapter);
         mEntryViewModel.getAllEntries().observe(this, entries ->
@@ -100,28 +104,6 @@ public class DashboardActivity extends AppCompatActivity {
         mMenuRecycler.setLayoutManager(layoutManager);
         mMenuRecycler.setAdapter(adapter);
     }
-
-//    void initHorizontalCalendar(){
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(new Date());
-//        int currentMonth = calendar.get(Calendar.MONTH);
-//        HorizontalCalendarLayoutManager layoutManager = new HorizontalCalendarLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-//        mCalendarAdapter =
-//                new HorizontalCalendarAdapter(getApplicationContext(),
-//                        new HorizontalCalendarProperties(HorizontalCalendarUtils.calculateMonthLength(currentMonth), currentMonth, calendar.get(Calendar.YEAR)),
-//                        (view, dateStamp, position) -> {
-//                            updateEntries(dateStamp);
-//                            scrollToCenter(view, layoutManager);
-//                        });
-//        mCalendarRecycler.setLayoutManager(layoutManager);
-//        SnapHelper snapHelper = new LinearSnapHelper();
-//        snapHelper.attachToRecyclerView(mCalendarRecycler);
-//        int totalVisibleItems = layoutManager.findFirstVisibleItemPosition() - layoutManager.findLastVisibleItemPosition();
-//        int centeredItemPosition = totalVisibleItems / 2;
-//        mCalendarRecycler.smoothScrollToPosition(calendar.get(Calendar.DAY_OF_MONTH));
-//        mCalendarRecycler.setScrollY(centeredItemPosition);
-//        mCalendarRecycler.setAdapter(mCalendarAdapter);
-//    }
 
     void initHorizontalCalendar(){
         Calendar calendar = Calendar.getInstance();
@@ -164,6 +146,7 @@ public class DashboardActivity extends AppCompatActivity {
         mCalendarRecycler.setLayoutManager(layoutManager);
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(mCalendarRecycler);
+        mCalendarRecycler.smoothScrollToPosition(calendar.get(Calendar.DAY_OF_MONTH));
         mCalendarRecycler.setAdapter(mCalendarAdapter);
         mCalendarAdapter.setData(getCalendarItems(getCalendarProperties().getCurrentMonth(), getCalendarProperties().getCurrentYear()));
     }
