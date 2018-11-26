@@ -102,7 +102,18 @@ public class Utils {
      */
     public static String returnStringDate(int month, int day, int year){
         String date = month + "/" + day + "/" + year;
-        Log.i("entrycreateddate:: ", date);
         return date;
+    }
+
+    public static int calculateSentimentProgress(Entry entry){
+        float score = Float.parseFloat(entry.getSentimentScore());
+        float progress;
+        if (score < 0){
+            progress = score * (-100);
+        }
+        else{
+            progress = score * (100);
+        }
+        return Math.round(progress);
     }
 }

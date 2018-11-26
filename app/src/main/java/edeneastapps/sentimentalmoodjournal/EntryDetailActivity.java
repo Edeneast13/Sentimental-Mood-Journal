@@ -73,13 +73,36 @@ public class EntryDetailActivity extends AppCompatActivity {
         snapHelper.attachToRecyclerView(mChartRecycler);
         mChartRecycler.setAdapter(chartAdapter);
         mChartRecycler.addItemDecoration(new CircleRecyclerViewDecoration());
-        chartAdapter.setData(getMockChartData());
+        chartAdapter.setData(getMockChartData(), getEntry());
+    }
+
+    List<DataEntry> getSentimentAnalysisData(Entry entry){
+        List<DataEntry> data = new ArrayList<>();
+        data.add(new ValueDataEntry("Positive", 10000));
+        data.add(new ValueDataEntry("Neutral", 12000));
+        data.add(new ValueDataEntry("Negative", 18000));
+        return data;
+    }
+
+    List<DataEntry> getEmotionAnalysisData(Entry entry){
+        List<DataEntry> data = new ArrayList<>();
+        data.add(new ValueDataEntry("Joy", multipleEmotionValue(entry.getEmotionJoy())));
+        data.add(new ValueDataEntry("Sadness", multipleEmotionValue(entry.getEmotionSadness())));
+        data.add(new ValueDataEntry("Surprise", multipleEmotionValue(entry.getEmotionSurprise())));
+        data.add(new ValueDataEntry("Fear", multipleEmotionValue(entry.getEmotionFear())));
+        data.add(new ValueDataEntry("Anger", multipleEmotionValue(entry.getEmotionAnger())));
+        data.add(new ValueDataEntry("Disgust", multipleEmotionValue(entry.getEmotionDisgust())));
+        return data;
+    }
+
+    Double multipleEmotionValue(Double value){
+        return (value * 10000);
     }
 
     List<ChartItem> getMockChartData(){
         List<ChartItem> data = new ArrayList<>();
         data.add(new ChartItem(0, getMockPieChartData(), "Sentiment Analysis"));
-        data.add(new ChartItem(1, getMockColumnChartData(), "Emotional Analysis"));
+        data.add(new ChartItem(1, getEmotionAnalysisData(getEntry()), "Emotional Analysis"));
         return data;
     }
 
