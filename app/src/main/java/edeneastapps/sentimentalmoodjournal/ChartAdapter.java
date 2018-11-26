@@ -60,6 +60,7 @@ public class ChartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         Cartesian column = AnyChart.column();
                         column.data(mData.get(position).getData());
                         chartViewHolder.mChart.setChart(column);
+                        column.animation(true);
                     }
                 }
                 chartViewHolder.mTitle.setText(mData.get(position).getTitle());

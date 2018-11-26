@@ -67,14 +67,14 @@ public class Utils {
             case 1:
                 id = R.mipmap.ic_sad_emoji_white;
                 break;
-            case 3:
+            case 2:
                 id = R.mipmap.ic_confused_emoji_white;
                 break;
-            case 4:
-                id = R.mipmap.ic_angry_icon_white;
+            case 3:
+                id = R.mipmap.ic_okay_emoji_white;
                 break;
-            case 5:
-                id = R.mipmap.ic_angry_icon_white;
+            case 4:
+                id = R.mipmap.ic_happy_emoji_white;
                 break;
         }
         return id;

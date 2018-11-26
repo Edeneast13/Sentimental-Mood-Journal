@@ -37,29 +37,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
         entryViewHolder.title.setText(mEntryList.get(pos).getTitle());
         entryViewHolder.content.setText(mEntryList.get(pos).getContent());
         entryViewHolder.time.setText(mEntryList.get(pos).getTimestamp());
-
-        switch (mEntryList.get(pos).getMood()){
-            case 0: {
-                entryViewHolder.emotion.setImageResource(R.mipmap.ic_angry_icon_white);
-                break;
-            }
-            case 1: {
-                entryViewHolder.emotion.setImageResource(R.mipmap.ic_sad_emoji_white);
-                break;
-            }
-            case 2: {
-                entryViewHolder.emotion.setImageResource(R.mipmap.ic_confused_emoji_white);
-                break;
-            }
-            case 3: {
-                entryViewHolder.emotion.setImageResource(R.mipmap.ic_okay_emoji_white);
-                break;
-            }
-            case 4: {
-                entryViewHolder.emotion.setImageResource(R.mipmap.ic_happy_emoji_white);
-                break;
-            }
-        }
+        entryViewHolder.emotion.setImageResource(Utils.returnMoodIconWhite(mEntryList.get(pos).getMood()));
 
         Utils.configCardLayout(mContext, entryViewHolder.layout, mEntryList.get(pos).getSentimentColor());
 
