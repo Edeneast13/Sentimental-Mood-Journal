@@ -4,9 +4,6 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-
-import java.util.Calendar;
 
 @Entity(tableName = "entries")
 public class Entry implements Parcelable{
@@ -22,6 +19,12 @@ public class Entry implements Parcelable{
     private String sentimentScore;
     private String sentimentRatio;
     private int sentimentColor;
+    private Double emotionJoy;
+    private Double emotionSadness;
+    private Double emotionSurprise;
+    private Double emotionFear;
+    private Double emotionAnger;
+    private Double emotionDisgust;
 
     Entry(){ }
 
@@ -105,6 +108,54 @@ public class Entry implements Parcelable{
         this.sentimentColor = sentimentColor;
     }
 
+    public Double getEmotionJoy() {
+        return emotionJoy;
+    }
+
+    public void setEmotionJoy(Double emotionJoy) {
+        this.emotionJoy = emotionJoy;
+    }
+
+    public Double getEmotionSadness() {
+        return emotionSadness;
+    }
+
+    public void setEmotionSadness(Double emotionSadness) {
+        this.emotionSadness = emotionSadness;
+    }
+
+    public Double getEmotionSurprise() {
+        return emotionSurprise;
+    }
+
+    public void setEmotionSurprise(Double emotionSurprise) {
+        this.emotionSurprise = emotionSurprise;
+    }
+
+    public Double getEmotionFear() {
+        return emotionFear;
+    }
+
+    public void setEmotionFear(Double emotionFear) {
+        this.emotionFear = emotionFear;
+    }
+
+    public Double getEmotionAnger() {
+        return emotionAnger;
+    }
+
+    public void setEmotionAnger(Double emotionAnger) {
+        this.emotionAnger = emotionAnger;
+    }
+
+    public Double getEmotionDisgust() {
+        return emotionDisgust;
+    }
+
+    public void setEmotionDisgust(Double emotionDisgust) {
+        this.emotionDisgust = emotionDisgust;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -122,6 +173,12 @@ public class Entry implements Parcelable{
         parcel.writeString(sentimentScore);
         parcel.writeString(sentimentRatio);
         parcel.writeInt(sentimentColor);
+        parcel.writeDouble(emotionJoy);
+        parcel.writeDouble(emotionSadness);
+        parcel.writeDouble(emotionSurprise);
+        parcel.writeDouble(emotionFear);
+        parcel.writeDouble(emotionAnger);
+        parcel.writeDouble(emotionDisgust);
     }
 
     /**
@@ -150,5 +207,11 @@ public class Entry implements Parcelable{
         sentimentScore = parcel.readString();
         sentimentRatio = parcel.readString();
         sentimentColor = parcel.readInt();
+        emotionJoy = parcel.readDouble();
+        emotionSadness = parcel.readDouble();
+        emotionSurprise = parcel.readDouble();
+        emotionFear = parcel.readDouble();
+        emotionAnger = parcel.readDouble();
+        emotionDisgust = parcel.readDouble();
     }
 }

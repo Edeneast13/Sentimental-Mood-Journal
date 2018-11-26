@@ -3,8 +3,8 @@ package edeneastapps.sentimentalmoodjournal;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class TwinWorldClient {
-    private static final String BASE_URL = "https://twinword-sentiment-analysis.p.mashape.com/";
+public class EmotionApiClient {
+    private static final String BASE_URL = "https://twinword-emotion-analysis-v1.p.mashape.com/";
     private static Retrofit sRetrofit = null;
 
     public static Retrofit getClient() {

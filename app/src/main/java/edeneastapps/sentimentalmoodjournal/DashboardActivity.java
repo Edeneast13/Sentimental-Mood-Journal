@@ -41,9 +41,6 @@ public class DashboardActivity extends AppCompatActivity {
     @BindView(R.id.menu_recycler)
     RecyclerView mMenuRecycler;
 
-    @BindView(R.id.menu_layout)
-    ConstraintLayout mMenuLayout;
-
     @BindView(R.id.calendar_full)
     CalendarView mCalendarFull;
 
@@ -75,13 +72,11 @@ public class DashboardActivity extends AppCompatActivity {
         initBmB(getMenuItems());
 
         mToolbar.setElevation(8);
-        mMenuLayout.setElevation(12);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mEntryViewModel.getAllEntries().observe(this, entries -> mEntryAdapter.setData(entries));
     }
 
     void initViewModel(){
@@ -97,8 +92,9 @@ public class DashboardActivity extends AppCompatActivity {
         });
         mEntryRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mEntryRecycler.setAdapter(mEntryAdapter);
-        mEntryViewModel.getAllEntries().observe(this, entries ->
-                mEntryAdapter.setData(entries));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        updateEntries(Utils.returnStringDate(calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
     }
 
     void initMenu(){
@@ -231,25 +227,9 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 
-//    @OnClick(R.id.entry_add_button)
-//    void setEntryAddButton(){
-//        startActivity(new Intent(DashboardActivity.this, NewEntryActivity.class));
-//        overridePendingTransition(0, 0);
-//    }
-
     void startAddEntryActivity(){
         startActivity(new Intent(DashboardActivity.this, NewEntryActivity.class));
         overridePendingTransition(0, 0);
-    }
-
-    @OnClick(R.id.menu_button)
-    void setMenuButtonListener(){
-        Utils.toggleViewVisibility(mMenuLayout);
-    }
-
-    @OnClick(R.id.menu_close_button)
-    void setMenuCloseButtonListener(){
-        Utils.toggleViewVisibility(mMenuLayout);
     }
 
     @OnClick(R.id.calendar_button)

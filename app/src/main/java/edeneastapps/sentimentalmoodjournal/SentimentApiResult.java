@@ -2,7 +2,7 @@ package edeneastapps.sentimentalmoodjournal;
 
 import com.google.gson.annotations.SerializedName;
 
-public class TwinWorldSentimentResult {
+public class SentimentApiResult {
     @SerializedName("type")
     private String type;
     @SerializedName("score")

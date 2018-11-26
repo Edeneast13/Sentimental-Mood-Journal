@@ -31,10 +31,6 @@
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
 
-        <service
-            android:name=".TwinWorldNetworkService"
-            android:exported="false"/>
-
         <activity
             android:name=".EntryDetailActivity"
             android:parentActivityName=".DashboardActivity"

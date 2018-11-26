@@ -117,21 +117,44 @@ public class NewEntryActivity extends AppCompatActivity {
     }
 
     void postSentiment(Entry entry){
-        TwinWorldInterface restService = TwinWorldClient.getClient().create(TwinWorldInterface.class);
-        restService.postSentiment(entry.getContent()).enqueue(new Callback<TwinWorldSentimentResult>() {
+        SentimentApiInterface restService = SentimentApiClient.getClient().create(SentimentApiInterface.class);
+        restService.postSentiment(entry.getContent()).enqueue(new Callback<SentimentApiResult>() {
             @Override
-            public void onResponse(@NonNull Call<TwinWorldSentimentResult> call, @NonNull Response<TwinWorldSentimentResult> response) {
+            public void onResponse(@NonNull Call<SentimentApiResult> call, @NonNull Response<SentimentApiResult> response) {
                 if (response.isSuccessful()){
                     entry.setSentimentType(response.body().getType());
                     entry.setSentimentScore(response.body().getScore());
                     entry.setSentimentRatio(response.body().getRatio());
                     entry.setSentimentColor(Utils.returnSentimentRangeColor(Float.parseFloat(response.body().getScore())));
+                    postEmotion(entry);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<SentimentApiResult> call, @NonNull Throwable t) {
+
+            }
+        });
+    }
+
+    void postEmotion(Entry entry){
+        EmotionApiInterface restService = EmotionApiClient.getClient().create(EmotionApiInterface.class);
+        restService.postEmotion(entry.getContent()).enqueue(new Callback<EmotionApiResult>() {
+            @Override
+            public void onResponse(@NonNull Call<EmotionApiResult> call, @NonNull Response<EmotionApiResult> response) {
+                if (response.isSuccessful()){
+                    entry.setEmotionJoy(response.body().getEmotionScores().getJoy());
+                    entry.setEmotionSadness(response.body().getEmotionScores().getSadness());
+                    entry.setEmotionSurprise(response.body().getEmotionScores().getSurprise());
+                    entry.setEmotionFear(response.body().getEmotionScores().getFear());
+                    entry.setEmotionAnger(response.body().getEmotionScores().getAnger());
+                    entry.setEmotionDisgust(response.body().getEmotionScores().getDisgust());
                     saveEntry(entry);
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<TwinWorldSentimentResult> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<EmotionApiResult> call, @NonNull Throwable t) {
 
             }
         });
