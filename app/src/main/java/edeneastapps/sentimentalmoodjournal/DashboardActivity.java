@@ -3,7 +3,6 @@ package edeneastapps.sentimentalmoodjournal;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +14,6 @@ import android.widget.CalendarView;
 import android.widget.FrameLayout;
 
 import com.nightonke.boommenu.BoomButtons.HamButton;
-import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomMenuButton;
 
 import java.util.ArrayList;
@@ -67,9 +65,8 @@ public class DashboardActivity extends AppCompatActivity {
         initViewModel();
         initHorizontalCalendar();
         initAdapter();
-        initMenu();
         initFullCalendar();
-        initBmB(getMenuItems());
+        initMenu(getMenuItems());
 
         mToolbar.setElevation(8);
     }
@@ -97,22 +94,12 @@ public class DashboardActivity extends AppCompatActivity {
         updateEntries(Utils.returnStringDate(calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
     }
 
-    void initMenu(){
-        List<MenuItem> items = new ArrayList<>();
-        items.add(new MenuItem("Statistics", R.color.colorAccent, R.color.primaryText));
-        items.add(new MenuItem("Settings", R.color.colorAccent, R.color.primaryText));
-        MenuAdapter adapter = new MenuAdapter(this, items);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mMenuRecycler.setLayoutManager(layoutManager);
-        mMenuRecycler.setAdapter(adapter);
-    }
-
-    void initBmB(List<Menu> menuItems){
+    void initMenu(List<MenuItem> menuItemItems){
         for (int i = 0; i < mBoomMenuButton.getPiecePlaceEnum().pieceNumber(); i++) {
             HamButton.Builder builder = new HamButton.Builder()
-                    .normalImageRes(menuItems.get(i).getDrawable())
-                    .normalTextRes(menuItems.get(i).getTitle())
-                    .subNormalTextRes(menuItems.get(i).getSubText())
+                    .normalImageRes(menuItemItems.get(i).getDrawable())
+                    .normalTextRes(menuItemItems.get(i).getTitle())
+                    .subNormalTextRes(menuItemItems.get(i).getSubText())
                     .normalColor(getResources().getColor(getMenuItems().get(i).getColor()))
                     .imagePadding(new Rect(32, 32, 32, 32))
                     .listener(index -> {
@@ -124,15 +111,14 @@ public class DashboardActivity extends AppCompatActivity {
                     });
             mBoomMenuButton.addBuilder(builder);
         }
-
     }
 
-    List<Menu> getMenuItems(){
-        List<Menu> items = new ArrayList<>();
-        items.add(new Menu(R.string.menu_add_title, R.string.menu_add_subText, R.mipmap.ic_journal_white, R.color.colorPrimary));
-        items.add(new Menu(R.string.menu_stats_title, R.string.menu_stats_subText, R.mipmap.ic_graph_white, R.color.colorPrimary));
-        items.add(new Menu(R.string.menu_rate_title, R.string.menu_rate_subText, R.mipmap.ic_ribbon_white, R.color.colorPrimary));
-        items.add(new Menu(R.string.menu_settings_title, R.string.menu_settings_subText, R.mipmap.ic_settings_white, R.color.colorPrimary));
+    List<MenuItem> getMenuItems(){
+        List<MenuItem> items = new ArrayList<>();
+        items.add(new MenuItem(R.string.menu_add_title, R.string.menu_add_subText, R.mipmap.ic_journal_white, R.color.colorPrimary));
+        items.add(new MenuItem(R.string.menu_stats_title, R.string.menu_stats_subText, R.mipmap.ic_graph_white, R.color.colorPrimary));
+        items.add(new MenuItem(R.string.menu_rate_title, R.string.menu_rate_subText, R.mipmap.ic_ribbon_white, R.color.colorPrimary));
+        items.add(new MenuItem(R.string.menu_settings_title, R.string.menu_settings_subText, R.mipmap.ic_settings_white, R.color.colorPrimary));
         return items;
     }
 

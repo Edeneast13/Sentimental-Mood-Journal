@@ -132,7 +132,7 @@ public class NewEntryActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<SentimentApiResult> call, @NonNull Throwable t) {
-
+                errorAlert("Sentiment Analysis Failed", t.getLocalizedMessage());
             }
         });
     }
@@ -155,7 +155,7 @@ public class NewEntryActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<EmotionApiResult> call, @NonNull Throwable t) {
-
+                errorAlert("Emotional Analysis Failed", t.getLocalizedMessage());
             }
         });
     }
@@ -163,6 +163,13 @@ public class NewEntryActivity extends AppCompatActivity {
     void saveEntry(Entry entry){
         new EntryViewModel(getApplication()).addEntry(entry);
         finish();
+    }
+
+    void errorAlert(String title, String message){
+        new AlertDialog.Builder(NewEntryActivity.this)
+                .setPositiveButton("Ok", (dialogInterface, i) -> {
+            dialogInterface.dismiss();
+        }).setMessage(message).setTitle(title).show();
     }
 
     @OnClick(R.id.new_entry_done_button)

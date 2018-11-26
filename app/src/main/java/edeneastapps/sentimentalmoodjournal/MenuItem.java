@@ -1,25 +1,31 @@
 package edeneastapps.sentimentalmoodjournal;
 
 public class MenuItem {
-    private String title;
-    private int backgroundColor;
-    private int textColor;
+    private int title;
+    private int subText;
+    private int drawable;
+    private int color;
 
-    public MenuItem(String title, int backgroundColor, int textColor) {
+    public MenuItem(int title, int subText, int drawable, int color) {
         this.title = title;
-        this.backgroundColor = backgroundColor;
-        this.textColor = textColor;
+        this.subText = subText;
+        this.drawable = drawable;
+        this.color = color;
     }
 
-    public String getTitle() {
+    public int getTitle() {
         return title;
     }
 
-    public int getBackgroundColor() {
-        return backgroundColor;
+    public int getSubText() {
+        return subText;
     }
 
-    public int getTextColor() {
-        return textColor;
+    public int getDrawable() {
+        return drawable;
+    }
+
+    public int getColor() {
+        return color;
     }
 }
