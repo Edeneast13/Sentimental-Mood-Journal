@@ -107,6 +107,9 @@ public class DashboardActivity extends AppCompatActivity {
                             case 0:{
                                 startAddEntryActivity();
                             }
+                            case 3:{
+                                startSettingsActivity();
+                            }
                         }
                     });
             mBoomMenuButton.addBuilder(builder);
@@ -115,10 +118,10 @@ public class DashboardActivity extends AppCompatActivity {
 
     List<MenuItem> getMenuItems(){
         List<MenuItem> items = new ArrayList<>();
-        items.add(new MenuItem(R.string.menu_add_title, R.string.menu_add_subText, R.mipmap.ic_journal_white, R.color.colorPrimary));
-        items.add(new MenuItem(R.string.menu_stats_title, R.string.menu_stats_subText, R.mipmap.ic_graph_white, R.color.colorPrimary));
-        items.add(new MenuItem(R.string.menu_rate_title, R.string.menu_rate_subText, R.mipmap.ic_ribbon_white, R.color.colorPrimary));
-        items.add(new MenuItem(R.string.menu_settings_title, R.string.menu_settings_subText, R.mipmap.ic_settings_white, R.color.colorPrimary));
+        items.add(new MenuItem(R.string.menu_add_title, R.string.menu_add_subText, R.mipmap.ic_journal_white, R.color.once_color_1));
+        items.add(new MenuItem(R.string.menu_stats_title, R.string.menu_stats_subText, R.mipmap.ic_graph_white, R.color.once_color_2));
+        items.add(new MenuItem(R.string.menu_rate_title, R.string.menu_rate_subText, R.mipmap.ic_ribbon_white, R.color.once_color_3));
+        items.add(new MenuItem(R.string.menu_settings_title, R.string.menu_settings_subText, R.mipmap.ic_settings_white, R.color.once_color_4));
         return items;
     }
 
@@ -215,6 +218,11 @@ public class DashboardActivity extends AppCompatActivity {
 
     void startAddEntryActivity(){
         startActivity(new Intent(DashboardActivity.this, NewEntryActivity.class));
+        overridePendingTransition(0, 0);
+    }
+
+    void startSettingsActivity(){
+        startActivity(new Intent(DashboardActivity.this, SettingsActivity.class));
         overridePendingTransition(0, 0);
     }
 

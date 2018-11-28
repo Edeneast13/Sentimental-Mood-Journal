@@ -2,7 +2,7 @@
     <string name="app_name">Once Journal</string>
 
     <string name="menu_add_title">Add Entry</string>
-    <string name="menu_add_subText">Build your sentiment journal by adding new entries</string>
+    <string name="menu_add_subText">Build your sentiment journal by adding entries</string>
 
     <string name="menu_stats_title">View Statistics</string>
     <string name="menu_stats_subText">View your overall sentiment statistics</string>

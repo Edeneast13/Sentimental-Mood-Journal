@@ -30,17 +30,19 @@
             android:parentActivityName=".DashboardActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
-
         <activity
             android:name=".EntryDetailActivity"
             android:parentActivityName=".DashboardActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
-
         <activity
             android:name=".EditActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:parentActivityName=".EntryDetailActivity">
+            android:parentActivityName=".EntryDetailActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
     </application>
 

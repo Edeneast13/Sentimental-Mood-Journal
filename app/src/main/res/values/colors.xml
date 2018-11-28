@@ -22,4 +22,9 @@
     <color name="lightblue500">#03a9f4</color>
     <color name="blue500">#2196f3</color>
 
+    <color name="once_color_1">#4A90E2</color>
+    <color name="once_color_2">#417505</color>
+    <color name="once_color_3">#9013FE</color>
+    <color name="once_color_4">#F5A623</color>
+
 </resources>
