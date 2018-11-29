@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/settings_layout"
     android:background="@color/backgroundLight"
-    tools:context=".SettingsActivity">
+    tools:context=".views.settings.SettingsActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
