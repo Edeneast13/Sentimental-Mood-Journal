@@ -1,4 +1,4 @@
-package edeneastapps.sentimentalmoodjournal.views.entrydetail;
+package edeneastapps.sentimentalmoodjournal.views.dashboard;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

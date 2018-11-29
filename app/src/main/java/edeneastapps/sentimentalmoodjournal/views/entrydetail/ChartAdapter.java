@@ -1,6 +1,8 @@
 package edeneastapps.sentimentalmoodjournal.views.entrydetail;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +18,8 @@ import com.anychart.charts.Pie;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import edeneastapps.sentimentalmoodjournal.R;
@@ -28,9 +32,11 @@ public class ChartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private List<ChartItem> mData;
     private Entry mEntry;
     private Context mContext;
+    private SharedPreferences mSharedPreferences;
 
-    ChartAdapter(Context context) {
+    ChartAdapter(Context context, SharedPreferences preferences) {
         mContext = context;
+        mSharedPreferences = preferences;
     }
 
     @NonNull
@@ -67,6 +73,13 @@ public class ChartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 }
                 chartViewHolder.mTitle.setText(mData.get(position).getTitle());
                 Utils.configCardLayout(mContext, chartViewHolder.mLayout, R.color.cardBackground);
+
+                if (isDarkThemeActive()){
+                    Utils.configCardLayout(mContext, chartViewHolder.mLayout, R.color.darkThemePrimary);
+                    chartViewHolder.mTitle.setTextColor(mContext.getResources().getColor(R.color.primaryText));
+                    chartViewHolder.mChart.setBackgroundColor(mContext.getResources().getColor(R.color.alternateText));
+                }
+
                 break;
             }
             case 0: {
@@ -90,6 +103,13 @@ public class ChartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 else{
                     waveViewHolder.mStatus.setText("Mostly Positive");
                 }
+
+                if (isDarkThemeActive()){
+                    Utils.configCardLayout(mContext, waveViewHolder.mLayout, R.color.darkThemePrimary);
+                    waveViewHolder.mStatus.setTextColor(mContext.getResources().getColor(R.color.primaryText));
+                    waveViewHolder.mTitle.setTextColor(mContext.getResources().getColor(R.color.primaryText));
+                }
+
                 break;
             }
         }
@@ -142,5 +162,9 @@ public class ChartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public void setData(List<ChartItem> data, Entry entry){
         this.mData = data;
         this.mEntry = entry;
+    }
+
+    boolean isDarkThemeActive(){
+        return mSharedPreferences.getBoolean("themeSetting", false);
     }
 }

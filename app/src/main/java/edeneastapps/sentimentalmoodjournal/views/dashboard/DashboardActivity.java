@@ -30,7 +30,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edeneastapps.sentimentalmoodjournal.application.MainApplication;
-import edeneastapps.sentimentalmoodjournal.views.entrydetail.EntryAdapter;
 import edeneastapps.sentimentalmoodjournal.views.entrydetail.EntryDetailActivity;
 import edeneastapps.sentimentalmoodjournal.views.newentry.NewEntryActivity;
 import edeneastapps.sentimentalmoodjournal.R;

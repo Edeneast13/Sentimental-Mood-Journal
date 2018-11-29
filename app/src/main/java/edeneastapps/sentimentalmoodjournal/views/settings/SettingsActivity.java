@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -42,6 +43,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     @BindView(R.id.version_text)
     TextView mVersionText;
+
+    @BindView(R.id.theme_switch)
+    SwitchCompat mThemeSwitch;
 
     @Inject SharedPreferences mSharedPreferences;
 

@@ -1,6 +1,8 @@
 package edeneastapps.sentimentalmoodjournal.views.entrydetail;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,10 +20,13 @@ import com.anychart.chart.common.dataentry.ValueDataEntry;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edeneastapps.sentimentalmoodjournal.R;
+import edeneastapps.sentimentalmoodjournal.application.MainApplication;
 import edeneastapps.sentimentalmoodjournal.database.entry.Entry;
 import edeneastapps.sentimentalmoodjournal.views.dashboard.horizontalcalendar.CircleRecyclerViewDecoration;
 import edeneastapps.sentimentalmoodjournal.utils.Utils;
@@ -56,11 +61,17 @@ public class EntryDetailActivity extends AppCompatActivity {
     @BindView(R.id.edit_button)
     Button mEditButton;
 
+    @BindView(R.id.detail_layout)
+    ConstraintLayout mMainLayout;
+
+    @Inject SharedPreferences mSharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entry_detail);
 
+        ((MainApplication)getApplication()).getSettingsComponent().inject(this);
         ButterKnife.bind(this);
         initAdapter();
         mToolbar.setElevation(8);
@@ -68,10 +79,14 @@ public class EntryDetailActivity extends AppCompatActivity {
         setEntry(getEntry());
 
         Utils.configCardLayout(this, mEditButton, R.color.cardBackground);
+
+        if (isDarkThemeActive()){
+            setDarkTheme();
+        }
     }
 
     void initAdapter(){
-        ChartAdapter chartAdapter = new ChartAdapter(this);
+        ChartAdapter chartAdapter = new ChartAdapter(this, mSharedPreferences);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mChartRecycler.setLayoutManager(layoutManager);
         SnapHelper snapHelper = new LinearSnapHelper();
@@ -143,6 +158,19 @@ public class EntryDetailActivity extends AppCompatActivity {
         mEntryEmotion.setImageResource(Utils.returnMoodIconWhite(entry.getMood()));
         mToolbarTitle.setText(entry.getTitle());
         Utils.configCardLayout(this, mEntryLayout, entry.getSentimentColor());
+    }
+
+    boolean isDarkThemeActive(){
+        return mSharedPreferences.getBoolean("themeSetting", false);
+    }
+
+    void setDarkTheme(){
+        Resources resources = getResources();
+        mToolbar.setBackgroundColor(resources.getColor(R.color.darkThemePrimary));
+        mToolbarTitle.setTextColor(resources.getColor(R.color.primaryText));
+        mMainLayout.setBackgroundColor(resources.getColor(R.color.darkThemeSecondary));
+        mEditButton.setTextColor(resources.getColor(R.color.primaryText));
+        Utils.configCardLayout(this, mEditButton, R.color.darkThemePrimary);
     }
 
     @OnClick(R.id.entry_detail_back_button)
