@@ -13,8 +13,4 @@ import edeneastapps.sentimentalmoodjournal.views.dashboard.DashboardActivity;
 @Component(modules = {AppModule.class, SettingsModule.class})
 public interface SettingsComponent {
     void inject(SettingsActivity activity);
-    void inject(DashboardActivity activity);
-    void inject(NewEntryActivity activity);
-    void inject(EditActivity activity);
-    void inject(EntryDetailActivity activity);
 }

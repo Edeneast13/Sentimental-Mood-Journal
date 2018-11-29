@@ -13,22 +13,25 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edeneastapps.sentimentalmoodjournal.R;
+import edeneastapps.sentimentalmoodjournal.application.MainApplication;
 import edeneastapps.sentimentalmoodjournal.database.entry.Entry;
 import edeneastapps.sentimentalmoodjournal.database.entry.EntryViewModel;
-import edeneastapps.sentimentalmoodjournal.rest.emotionapi.EmotionApiClient;
 import edeneastapps.sentimentalmoodjournal.rest.emotionapi.EmotionApiInterface;
 import edeneastapps.sentimentalmoodjournal.rest.emotionapi.EmotionApiResult;
-import edeneastapps.sentimentalmoodjournal.rest.sentimentapi.SentimentApiClient;
-import edeneastapps.sentimentalmoodjournal.rest.sentimentapi.SentimentApiInterface;
-import edeneastapps.sentimentalmoodjournal.rest.sentimentapi.SentimentApiResult;
+import edeneastapps.sentimentalmoodjournal.rest.sentimentapi.SentimentRestInterface;
+import edeneastapps.sentimentalmoodjournal.rest.sentimentapi.SentimentRestResult;
 import edeneastapps.sentimentalmoodjournal.utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class NewEntryActivity extends AppCompatActivity {
 
@@ -40,6 +43,9 @@ public class NewEntryActivity extends AppCompatActivity {
 
     @BindView(R.id.title_input)
     TextView mTitle;
+
+    @Inject @Named("sentiment") Retrofit mSentimentRetrofit;
+    @Inject @Named("emotion") Retrofit mEmotionRetrofit;
 
     private boolean mIsChanged = false;
     int mSelectedMood = 0;
@@ -56,6 +62,8 @@ public class NewEntryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
+
+        ((MainApplication)getApplication()).getRestComponent().inject(this);
 
         ButterKnife.bind(this);
 
@@ -127,10 +135,10 @@ public class NewEntryActivity extends AppCompatActivity {
     }
 
     void postSentiment(Entry entry){
-        SentimentApiInterface restService = SentimentApiClient.getClient().create(SentimentApiInterface.class);
-        restService.postSentiment(entry.getContent()).enqueue(new Callback<SentimentApiResult>() {
+        SentimentRestInterface restService = mSentimentRetrofit.create(SentimentRestInterface.class);
+        restService.postSentiment(entry.getContent()).enqueue(new Callback<SentimentRestResult>() {
             @Override
-            public void onResponse(@NonNull Call<SentimentApiResult> call, @NonNull Response<SentimentApiResult> response) {
+            public void onResponse(@NonNull Call<SentimentRestResult> call, @NonNull Response<SentimentRestResult> response) {
                 if (response.isSuccessful()){
                     entry.setSentimentType(response.body().getType());
                     entry.setSentimentScore(response.body().getScore());
@@ -141,14 +149,14 @@ public class NewEntryActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<SentimentApiResult> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<SentimentRestResult> call, @NonNull Throwable t) {
                 errorAlert("Sentiment Analysis Failed", t.getLocalizedMessage());
             }
         });
     }
 
     void postEmotion(Entry entry){
-        EmotionApiInterface restService = EmotionApiClient.getClient().create(EmotionApiInterface.class);
+        EmotionApiInterface restService = mEmotionRetrofit.create(EmotionApiInterface.class);
         restService.postEmotion(entry.getContent()).enqueue(new Callback<EmotionApiResult>() {
             @Override
             public void onResponse(@NonNull Call<EmotionApiResult> call, @NonNull Response<EmotionApiResult> response) {
