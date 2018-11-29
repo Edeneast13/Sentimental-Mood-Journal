@@ -1,6 +1,8 @@
 package edeneastapps.sentimentalmoodjournal.views.dashboard;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import android.support.v7.widget.SnapHelper;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.nightonke.boommenu.BoomButtons.HamButton;
 import com.nightonke.boommenu.BoomMenuButton;
@@ -21,9 +24,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import edeneastapps.sentimentalmoodjournal.application.MainApplication;
 import edeneastapps.sentimentalmoodjournal.views.entrydetail.EntryAdapter;
 import edeneastapps.sentimentalmoodjournal.views.entrydetail.EntryDetailActivity;
 import edeneastapps.sentimentalmoodjournal.views.newentry.NewEntryActivity;
@@ -60,8 +66,16 @@ public class DashboardActivity extends AppCompatActivity {
     @BindView(R.id.empty_layout)
     ConstraintLayout mEmptyLayout;
 
+    @BindView(R.id.empty_text)
+    TextView mEmptyText;
+
+    @BindView(R.id.dashboard_layout)
+    ConstraintLayout mMainLayout;
+
     @BindView(R.id.bmb)
     BoomMenuButton mBoomMenuButton;
+
+    @Inject SharedPreferences mSharedPreferences;
 
     EntryViewModel mEntryViewModel;
     EntryAdapter mEntryAdapter;
@@ -73,6 +87,8 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        ((MainApplication) getApplication()).getSettingsComponent().inject(this);
+
         ButterKnife.bind(this);
         initViewModel();
         initHorizontalCalendar();
@@ -81,11 +97,10 @@ public class DashboardActivity extends AppCompatActivity {
         initMenu(getMenuItems());
 
         mToolbar.setElevation(8);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+        if (isDarkThemeActive()){
+            setDarkTheme();
+        }
     }
 
     void initViewModel(){
@@ -244,5 +259,36 @@ public class DashboardActivity extends AppCompatActivity {
     void setCalendarFullButton(){
         Utils.toggleViewVisibility(mCalendarRecycler);
         Utils.toggleViewVisibility(mCalendarLayout);
+    }
+
+    boolean isDarkThemeActive(){
+        return mSharedPreferences.getBoolean("themeSetting", false);
+    }
+
+    void setDarkTheme(){
+        Resources resources = getResources();
+        mToolbar.setBackgroundColor(resources.getColor(R.color.darkThemePrimary));
+        mMainLayout.setBackgroundColor(resources.getColor(R.color.darkThemeSecondary));
+        mEmptyLayout.setBackgroundColor(resources.getColor(R.color.darkThemeSecondary));
+        mEmptyText.setTextColor(resources.getColor(R.color.darkThemePrimary));
+    }
+
+    void setLightTheme(){
+        Resources resources = getResources();
+        mToolbar.setBackgroundColor(resources.getColor(R.color.lightThemePrimary));
+        mMainLayout.setBackgroundColor(resources.getColor(R.color.lightThemeSecondary));
+        mEmptyLayout.setBackgroundColor(resources.getColor(R.color.lightThemeSecondary));
+        mEmptyText.setTextColor(resources.getColor(R.color.alternateText));
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (isDarkThemeActive()){
+            setDarkTheme();
+        }
+        else{
+            setLightTheme();
+        }
     }
 }

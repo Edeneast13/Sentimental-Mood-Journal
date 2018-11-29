@@ -70,7 +70,7 @@
         <TextView
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/alternateText2"
             android:text="Receive reminder notifications that help you build your journal once a day."
             android:textSize="14sp"
             android:id="@+id/reminder_summary"
@@ -113,7 +113,7 @@
         <TextView
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/alternateText2"
             android:text="Change the default light theme across the app to a dark theme. "
             android:textSize="14sp"
             android:id="@+id/theme_summary"
@@ -136,6 +136,7 @@
         android:layout_height="wrap_content"
         android:text="v1.0 (Build 1000)"
         android:textSize="16sp"
+        android:id="@+id/version_text"
         android:gravity="center"
         android:layout_marginBottom="16dp"
         android:textColor="@color/alternateText"

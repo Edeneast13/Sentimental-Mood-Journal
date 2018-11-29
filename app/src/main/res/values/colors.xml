@@ -8,8 +8,15 @@
     <color name="backgroundDark">#424242</color>
     <color name="cardBackground">#FFFFFF</color>
 
+    <color name="darkThemePrimary">#212121</color>
+    <color name="darkThemeSecondary">#424242</color>
+
+    <color name="lightThemePrimary">#FFFFFF</color>
+    <color name="lightThemeSecondary">#e0e0e0</color>
+
     <color name="primaryText">#FFFFFF</color>
     <color name="alternateText">#4A4A4A</color>
+    <color name="alternateText2">#9e9e9e</color>
 
     <color name="orange500">#ff9800</color>
     <color name="amber500">#ffc107</color>
